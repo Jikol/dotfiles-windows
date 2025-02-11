@@ -1,0 +1,50 @@
+# Static includes #
+[include]
+	path = ~/.config/delta/catppuccin.gitconfig
+
+# Main settings section #
+[alias]
+	up = fetch -p
+	last = log -1 HEAD --stat
+	r = remote -v
+	b = branch -a
+	c = commit -m
+	s = status -sb
+	d = diff
+	stat = status
+	ll = log --oneline --decorate --graph
+	sub = submodule update --recursive --remote
+	conf = config --list --show-origin --show-scope
+	aliases = config --get-regex ^alias
+
+[init]
+	defaultBranch = master
+
+[core]
+	autocrlf = false
+	filemode = false
+	sshCommand = C:/Windows/System32/OpenSSH/ssh.exe
+	pager = delta
+
+[delta]
+  features = catppuccin-mocha
+  side-by-side = true
+  navigate = true
+
+[merge]
+  conflictstyle = diff3
+
+[diff]
+  colorMoved = default
+# --------------------- #
+
+# GPG Signing section #
+# ------------------- #
+
+# Include SSH creds section #
+[includeIf "gitdir:**/chezmoi/**/.git"]
+  path = github.gitconfig
+
+[includeIf "gitdir:**/windows-dev/**/.git"]
+  path = github.gitconfig
+# ------------------------- #
