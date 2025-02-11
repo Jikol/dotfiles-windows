@@ -1,0 +1,11 @@
+Host vsbsrv
+  HostName vsrvfeia0h-86.vsb.cz
+  User jav0032
+
+Host retina-staging
+  HostName 3.123.200.77
+  User admin
+
+Host retina-production
+  HostName 52.58.198.193
+  User admin
