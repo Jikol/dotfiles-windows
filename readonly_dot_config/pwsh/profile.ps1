@@ -1,53 +1,63 @@
-# Aliases
+## Aliases
+Set-Alias csl cls
 Set-Alias sudo gsudo
 Set-Alias vim nvim
 Set-Alias ip ipconfig
 Set-Alias cat bat
 Set-Alias ch chezmoi
+Set-Alias pathset Invoke-Path-Set
+Set-Alias pathunset Invoke-Path-Unset
+Set-Alias ls Invoke-Ls
 
-# Short Functions
-function ls { wsl exec exa --icons }
+## Function aliases
 function ll { wsl exec exa -l --icons }
 function la { wsl exec exa -la --icons }
 function l { wsl exec tmux new-session -A -s main }
-function .. { cd .. }
-function rld { . $PROFILE }
 function chcd { cd $(chezmoi source-path) }
+function chsync {
+  chezmoi list --path-style absolute | ForEach-Object {
+    chezmoi add "$($_)"
+  }
+}
+function ff {
+  $env:FZF_DEFAULT_COMMAND="fd --hidden"
+  $output = fzf --preview "bat -pf {} || ls -a {}" --height ~100% --layout reverse --style minimal
+  if ($output -and (Test-Path $output -PathType Container)) { Set-Location $output }
+  elseif ($output -and (Test-Path $output -PathType Leaf)) { vim $output }
+}
 function pathrld {
     $env:Path = "$([System.Environment]::GetEnvironmentVariable("Path", "User"));$([System.Environment]::GetEnvironmentVariable("Path", "Machine"))"
 }
 function path { 
     Write-Host "System Path Variables" -ForegroundColor Cyan
-    [System.Environment]::GetEnvironmentVariable("Path", "Machine") -split ";"
+    [System.Environment]::GetEnvironmentVariable("Path", "Machine") -split ";" |
+      Where-Object { $_ -ne "" }
     Write-Host "User Path Variables" -ForegroundColor Cyan
-    [System.Environment]::GetEnvironmentVariable("Path", "User") -split ";"
+    [System.Environment]::GetEnvironmentVariable("Path", "User") -split ";" |
+      Where-Object { $_ -ne "" }
 }
+function .. { cd .. }
+function rld { & $profile }
 
-# Modules
-Import-Module -Name Microsoft.WinGet.CommandNotFound
+## Import modules
+Import-Module -Name PSFzf
+Import-Module -Name PSReadLine
 
-# Variables
+## Shell variables
 Set-Variable "PROFILE" "$HOME\.config\pwsh\profile.ps1"
 Set-Variable "CONFIG_POWERSHELL" "$HOME\.config\pwsh\profile.ps1"
-Set-Variable "CONFIG_VIM" "$HOME\AppData\Local\nvim\init.vim"
+Set-Variable "CONFIG_VIM" "$HOME\.config\nvim\init.vim"
 
-# Prompt Theme
-oh-my-posh init pwsh --config $HOME\.config\omp\fluent.json | iex
-
-# Zoxide init
-iex (& { (zoxide init powershell | Out-String) })
-
-# Longer Functions
-function pathset {
-    param (
-        [string]$newEntry
-    )
+## Functions
+function Invoke-Ls { wsl exec exa --icons }
+function Invoke-Path-Set {
+    param ([string]$newEntry)
     if ([string]::IsNullOrEmpty($newEntry)) {
-        "Missing positional argument", "Synopsis: envset [path]" | Write-Host -ForegroundColor Red
+        "Missing positional argument", "Synopsis: envset [path]" | Write-Error
         return
     }
     if (-not (Test-Path $newEntry)) {
-        Write-Host "The specified path does not exist: $newEntry" -ForegroundColor Red
+        Write-Error "The specified path does not exist: $newEntry"
         return
     }
 
@@ -64,20 +74,19 @@ function pathset {
         Write-Host "'$newEntry' path is already in Path environment variable" -ForegroundColor Cyan
     }
 }
-function pathunset {
-    param (
-        [string]$existEntry
-    )
+function Invoke-Path-Unset {
+    param ([string]$existEntry)
     if ([string]::IsNullOrEmpty($existEntry)) {
-        "Missing positional argument", "Synopsis: envset [path]" | Write-Host -ForegroundColor Red
+        "Missing positional argument", "Synopsis: envset [path]" | Write-Error
         return
     }
     if (-not (Test-Path $existEntry)) {
-        Write-Host "The specified path does not exist: $existEntry" -ForegroundColor Red
+        Write-Error "The specified path does not exist: $existEntry"
         return
     }
 
-    $previousPath = [System.Environment]::GetEnvironmentVariable("Path", "User") -split ";" | Where-Object { $_ -ne $existEntry }
+    $previousPath = [System.Environment]::GetEnvironmentVariable("Path", "User") -split ";" |
+      Where-Object { $_ -ne $existEntry }
     $newPath = ($previousPath -join ";")
     [System.Environment]::SetEnvironmentVariable("Path", $newPath, "User")
 
@@ -87,5 +96,21 @@ function pathunset {
     path
 }
 
-# Entrypoint
+
+## Themes
+oh-my-posh init pwsh --config $HOME\.config\omp\fluent.json | Invoke-Expression
+$env:FZF_DEFAULT_OPTS=@"
+--color=bg+:#45475a,spinner:#f5e0dc,hl:#f38ba8
+--color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc
+--color=marker:#b4befe,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8
+--color=selected-bg:#45475a
+--multi
+"@
+
+## Initialization
+Invoke-Expression (& { (zoxide init powershell | Out-String) })
+Set-PsFzfOption -PSReadlineChordReverseHistory "Ctrl+y"
+Set-PSReadLineOption -PredictionSource History
+Set-PSReadLineOption -PredictionViewStyle ListView
+
 clear

@@ -1,6 +1,6 @@
 # Static includes #
 [include]
-	path = ~/.config/delta/catppuccin.gitconfig
+	path = ~/.config/delta/catppuccin_mocha.gitconfig
 
 # Main settings section #
 [alias]

@@ -1,7 +1,7 @@
 ﻿#Requires AutoHotkey v2.0
 #SingleInstance Force
 Persistent(true)
-
+;;;;
 ; = Remap keystrokes ===> ;
 #Space::
 {
@@ -10,7 +10,7 @@ Persistent(true)
 
 ^!l::
 {
-	Run("wt --fullscreen -p Linux",,,&PID)
+	Run("wt --fullscreen -p Tmux",,,&PID)
 	return
 }
 
