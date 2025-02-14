@@ -440,7 +440,7 @@
                 "name": "PowerShell",
                 "opacity": 80,
                 "source": "Windows.Terminal.PowershellCore",
-                "tabTitle": "Terminal",
+                "tabTitle": "PowerShell",
                 "useAcrylic": false
             },
             {
@@ -451,7 +451,7 @@
                 "icon": "ms-appx:///ProfileIcons/{9acb9455-ca41-5af7-950f-6bca1bc9722f}.png",
                 "name": "Tmux",
                 "startingDirectory": "~",
-                "tabTitle": "Linux"
+                "tabTitle": "Tmux"
             },
             {
                 "guid": "{e7ec26cd-c06a-52c5-997d-48f7b21aff1b}",
@@ -465,7 +465,7 @@
                 "closeOnExit": "automatic",
                 "commandline": "powershell",
                 "cursorShape": "bar",
-                "elevate": true,
+                "elevate": false,
                 "guid": "{12852f49-9a2c-4387-9d9d-4dd3126fd05d}",
                 "hidden": false,
                 "historySize": 9001,
@@ -473,7 +473,18 @@
                 "name": "PowerShell 5",
                 "snapOnInput": true,
                 "startingDirectory": "%USERPROFILE%",
-                "tabTitle": "Powershell"
+                "tabTitle": "PowerShell 5"
+            },
+            {
+                "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
+                "hidden": false,
+                "name": "Command Prompt",
+                "tabTitle": "Command Prompt"
+            },
+            {
+                "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+                "hidden": false,
+                "name": "Windows PowerShell"
             }
         ]
     },
