@@ -1,3 +1,6 @@
+Write-Host "TEST"
+
+<#
 ### Script for installing development tools and their settings in Windows 11 21H2 ###
 
 ## Leverage access control (ensuring that the script is always run as administrator, otherwise it will not run) ##
@@ -89,6 +92,6 @@ try {
 
 # Stop logging #
 Stop-Transcript
+#>
 
 cmd /c pause
-
