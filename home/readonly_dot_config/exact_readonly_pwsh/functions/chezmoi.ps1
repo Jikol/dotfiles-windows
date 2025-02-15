@@ -19,4 +19,12 @@ function Invoke-Chezmoi-Sync {
     }
     Write-Host "$path added to managed files" -ForegroundColor Cyan 
   }
+
+  $output = chezmoi diff
+  if ([string]::IsNullOrWhiteSpace($output)) {
+    Write-Host "All chezmoi files synced to source path ($(chezmoi source-path))" -ForegroundColor Green
+  } else {
+    Write-Host "Chezmoi synced files are inconsistent!" -ForegroundColor Yellow
+    Write-Output $output
+  }
 }

@@ -2,7 +2,7 @@
 
 ## Leverage access control (ensuring that the script is always run as administrator, otherwise it will not run) ##
 $principal = New-Object System.Security.Principal.WindowsPrincipal([System.Security.Principal.WindowsIdentity]::GetCurrent())
-if (-not $principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)) {
+if (! $principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)) {
   Write-Host "Attempt to start elevated process" -ForegroundColor Yellow
   try {
     $proc = Start-Process powershell.exe -ArgumentList "-File `"$PSCommandPath`"" -Verb RunAs -PassThru
@@ -69,6 +69,21 @@ if (-Not Test-Connection -ComputerName 8.8.8.8 -Count 3 -Quiet) {
   Write-Host "Network is unavailable, check your connection and try again" -ForegroundColor Red
   Stop-Transcript
   
+  exit 1
+}
+
+## Programs & Package Managers installation ##
+
+# WSL
+$url = "https://github.com/microsoft/WSL/releases/download/2.4.11/wsl.2.4.11.0.x64.msi"
+$destinationPath = "$env:TEMP\wsl.2.4.11.0.x64.msi"
+try {
+  Invoke-WebRequest -Uri $url -OutFile $destinationPath -ErrorAction Stop
+  Start-Process -FilePath $destinationPath -ArgumentList "/quiet" -Wait -ErrorAction Stop
+} catch {
+  Write-Host "Failed to download and install WSL (Error: $_)" -ForegroundColor Red
+  Stop-Transcript
+
   exit 1
 }
 
