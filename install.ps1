@@ -1,7 +1,9 @@
-Write-Host "TEST"
-
-<#
 ### Script for installing development tools and their settings in Windows 11 21H2 ###
+
+## Helper Functions ##
+function Invoke-List-Variable{[CmdletBinding()][OutputType([string])]param([Parameter(Mandatory=$true)][string]$name,[Parameter(Mandatory=$true)][System.EnvironmentVariableTarget]$scope)return[Environment]::GetEnvironmentVariable($name,$scope)}
+function Invoke-Env-Reload{$userName=$env:USERNAME;$architecture=$env:PROCESSOR_ARCHITECTURE;$psModulePath=$env:PSModulePath;$scopeList="Process","Machine";if("SYSTEM","${env:COMPUTERNAME}`$"-notcontains $userName){$scopeList+="User"}foreach($scope in $scopeList){$envList=[string]::Empty;switch($scope){"User"{$envList=Get-Item "HKCU:\Environment" -ErrorAction SilentlyContinue|Select-Object -ExpandProperty Property}"Machine"{$envList=Get-Item "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Environment"|Select-Object -ExpandProperty Property}"Process"{$envList=Get-ChildItem Env:\|Select-Object -ExpandProperty Key}};$envList|ForEach-Object{Set-Item "Env:$_"-Value(Invoke-List-Variable -scope $scope -name $_)}};$paths="Machine","User"|ForEach-Object{(Invoke-List-Variable -name "Path" -scope $_)-split ';'}|Select-Object -Unique;$env:Path=$paths-join ';';$env:PSModulePath=$psModulePath;if($userName){$env:USERNAME=$userName};if($architecture){$env:PROCESSOR_ARCHITECTURE=$architecture}}
+function Invoke-Command-Install{param([string]$url,[string]$programName,[string]$programCli)try{Write-Host "Installing $programName package manager ($programCli)" -ForegroundColor Cyan;Invoke-RestMethod -Uri $url|Invoke-Expression;Invoke-Env-Reload;Get-Command $programCli -ErrorAction Stop;Write-Host "$programName has been successfully installed" -ForegroundColor Green;& $programCli --version}catch{Write-Host "Failed to download and install $programName (Error: $_)" -ForegroundColor Red;Stop-Transcript;exit 1}}
 
 ## Leverage access control (ensuring that the script is always run as administrator, otherwise it will not run) ##
 $principal = New-Object System.Security.Principal.WindowsPrincipal([System.Security.Principal.WindowsIdentity]::GetCurrent())
@@ -75,14 +77,21 @@ if (-Not Test-Connection -ComputerName 8.8.8.8 -Count 3 -Quiet) {
   exit 1
 }
 
-## Programs & Package Managers installation ##
+## Package Managers installation ##
 
-# WSL
+# WSL #
 $url = "https://github.com/microsoft/WSL/releases/download/2.4.11/wsl.2.4.11.0.x64.msi"
 $destinationPath = "$env:TEMP\wsl.2.4.11.0.x64.msi"
 try {
+  Write-Host "Installing windows subsystem for linux (WSL)" -ForegroundColor Cyan
   Invoke-WebRequest -Uri $url -OutFile $destinationPath -ErrorAction Stop
   Start-Process -FilePath $destinationPath -ArgumentList "/quiet" -Wait -ErrorAction Stop
+  Invoke-Env-Reload
+  Get-Command wsl -ErrorAction Stop
+  wsl --update
+  Write-Host "WSL has been successfully installed" -ForegroundColor Green
+  wsl --version
+  wsl --status
 } catch {
   Write-Host "Failed to download and install WSL (Error: $_)" -ForegroundColor Red
   Stop-Transcript
@@ -90,8 +99,34 @@ try {
   exit 1
 }
 
+# Winget #
+$url = "https://github.com/microsoft/winget-cli/releases/download/v1.9.25200/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
+$destinationPath = "$env:TEMP\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
+try {
+  Write-Host "Installing windows package manager (Winget)" -ForegroundColor Cyan
+  Invoke-WebRequest -Uri $url -OutFile $destinationPath -ErrorAction Stop
+  Add-AppxPackage -Path $destinationPath -ErrorAction Stop
+  Invoke-Env-Reload
+  Get-Command winget -ErrorAction Stop
+  Write-Host "Winget has been successfully installed" -ForegroundColor Green
+  winget --version
+  winget --info
+} catch {
+  Write-Host "Failed to download and install Winget (Error: $_)" -ForegroundColor Red
+  Stop-Transcript
+
+  exit 1
+}
+
+# Chocolatey #
+Invoke-Command-Install -url "https://community.chocolatey.org/install.ps1" -programName "Chocolatey" -programCli "choco"
+
+# Scoop #
+Invoke-Command-Install -url "https://get.scoop.sh" -programName "Scoop" -programCli "scoop"
+
+## Program installation ##
+
 # Stop logging #
 Stop-Transcript
-#>
 
 cmd /c pause
