@@ -1,4 +1,4 @@
-## Leverage access control
+## Leverage access control ##
 $principal = New-Object System.Security.Principal.WindowsPrincipal([System.Security.Principal.WindowsIdentity]::GetCurrent())
 if (-not $principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)) {
   Write-Host "Attempt to start elevated process" -ForegroundColor Yellow
@@ -15,7 +15,7 @@ if (-not $principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Adm
   }
 }
 
-## Helper functions
+## Helper functions ##
 function ln {
   param ([string]$target, [string]$source)
   if (Test-Path $target) { 
@@ -26,13 +26,13 @@ function ln {
 
 ## Symlink program config outside ~/.config directory ##
 
-# Windows Terminal
+# Windows Terminal #
 ln "$HOME\AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json" "$HOME\.config\wt\settings.json"
 
-# PowerShell
+# PowerShell #
 ln "$HOME\Documents\PowerShell\profile.ps1" "$HOME\.config\pwsh\profile.ps1"
 
-# Btop
+# Btop #
 ln "$HOME\scoop\apps\btop\current\btop.conf" "$HOME\.config\btop\btop.conf"
 ln "$HOME\scoop\apps\btop\current\themes" "$HOME\.config\btop\themes"
 

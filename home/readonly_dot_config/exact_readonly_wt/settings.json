@@ -33,18 +33,18 @@
         {
             "command": 
             {
-                "action": "moveFocus",
-                "direction": "down"
-            },
-            "id": "User.moveFocus.F747588A"
-        },
-        {
-            "command": 
-            {
                 "action": "quakeMode"
             },
             "id": "User.quakeMode.F1E129A4",
             "keys": "ctrl+alt+t"
+        },
+        {
+            "command": 
+            {
+                "action": "moveFocus",
+                "direction": "down"
+            },
+            "id": "User.moveFocus.F747588A"
         },
         {
             "command": 
@@ -55,16 +55,16 @@
             "id": "User.splitPane.B39B174B"
         },
         {
+            "command": "closePane",
+            "id": "User.closePane"
+        },
+        {
             "command": 
             {
                 "action": "splitPane",
                 "split": "down"
             },
             "id": "User.splitPane.D5151347"
-        },
-        {
-            "command": "closePane",
-            "id": "User.closePane"
         },
         {
             "command": 
@@ -480,11 +480,6 @@
                 "hidden": false,
                 "name": "Command Prompt",
                 "tabTitle": "Command Prompt"
-            },
-            {
-                "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
-                "hidden": false,
-                "name": "Windows PowerShell"
             }
         ]
     },

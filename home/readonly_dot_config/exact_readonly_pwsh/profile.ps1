@@ -1,16 +1,31 @@
-## Aliases
+Write-Host "Reloading User Profile..." -ForegroundColor Cyan
+
+## Import modules
+Import-Module -Name PSFzf
+Import-Module -Name PSReadLine
+
+## Import functions ##
+. $HOME\.config\pwsh\functions\environment.ps1
+. $HOME\.config\pwsh\functions\chezmoi.ps1
+
+## Aliases ##
 Set-Alias csl cls
 Set-Alias sudo gsudo
 Set-Alias vim nvim
 Set-Alias ip ipconfig
 Set-Alias cat bat
 Set-Alias ch chezmoi
-Set-Alias pathset Invoke-Path-Set
-Set-Alias pathunset Invoke-Path-Unset
-Set-Alias ls Invoke-Ls
-Set-Alias chsync Invoke-Chezmoi-Managed
+Set-Alias ls override-ls
+Set-Alias path Invoke-List-Path
+Set-Alias env Invoke-List-Variable
+Set-Alias envrld Invoke-Env-Reload
+Set-Alias chsync Invoke-Chezmoi-Sync
 
-## Function aliases
+## Function aliases ##
+# Listings #
+function .. { cd .. }
+# (needs to be as function due to 'ls' is already alias for Set-Location)
+function override-ls { wsl exec exa --icons }
 function ll { wsl exec exa -l --icons }
 function la { wsl exec exa -la --icons }
 function l { wsl exec tmux new-session -A -s main }
@@ -21,35 +36,14 @@ function ff {
   if ($output -and (Test-Path $output -PathType Container)) { Set-Location $output }
   elseif ($output -and (Test-Path $output -PathType Leaf)) { vim $output }
 }
-function pathrld {
-    $env:Path = "$([System.Environment]::GetEnvironmentVariable("Path", "User"));$([System.Environment]::GetEnvironmentVariable("Path", "Machine"))"
-}
-function path { 
-    Write-Host "System Path Variables" -ForegroundColor Cyan
-    [System.Environment]::GetEnvironmentVariable("Path", "Machine") -split ";" |
-      Where-Object { $_ -ne "" }
-    Write-Host "User Path Variables" -ForegroundColor Cyan
-    [System.Environment]::GetEnvironmentVariable("Path", "User") -split ";" |
-      Where-Object { $_ -ne "" }
-}
-function .. { cd .. }
-function rld { & $profile }
 
-## Import modules
-Import-Module -Name PSFzf
-Import-Module -Name PSReadLine
-
-## Shell variables
+## PowerShell variables ##
 Set-Variable "PROFILE" "$HOME\.config\pwsh\profile.ps1"
 Set-Variable "CONFIG_POWERSHELL" "$HOME\.config\pwsh\profile.ps1"
 Set-Variable "CONFIG_VIM" "$HOME\.config\nvim\init.vim"
+Set-Variable "CONFIG_CHEZMOI" "$HOME\.config\ch\managed.json"
 
-## Functions
-. $HOME\.config\pwsh\functions\path_set.ps1
-. $HOME\.config\pwsh\functions\chezmoi_managed.ps1
-function Invoke-Ls { wsl exec exa --icons }
-
-## Themes
+## Themes ##
 oh-my-posh init pwsh --config $HOME\.config\omp\fluent.json | Invoke-Expression
 $env:FZF_DEFAULT_OPTS=@"
 --color=bg+:#45475a,spinner:#f5e0dc,hl:#f38ba8
@@ -59,7 +53,7 @@ $env:FZF_DEFAULT_OPTS=@"
 --multi
 "@
 
-## Initialization
+## Initialization ##
 Invoke-Expression (& { (zoxide init powershell | Out-String) })
 Set-PsFzfOption -PSReadlineChordReverseHistory "Ctrl+y"
 Set-PSReadLineOption -PredictionSource History
