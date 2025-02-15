@@ -35,4 +35,3 @@ ln "$HOME\Documents\PowerShell\profile.ps1" "$HOME\.config\pwsh\profile.ps1"
 # Btop #
 ln "$HOME\scoop\apps\btop\current\btop.conf" "$HOME\.config\btop\btop.conf"
 ln "$HOME\scoop\apps\btop\current\themes" "$HOME\.config\btop\themes"
-

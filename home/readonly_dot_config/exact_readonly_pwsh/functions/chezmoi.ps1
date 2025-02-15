@@ -1,4 +1,7 @@
 function Invoke-Chezmoi-Sync {
+  $path = $(chezmoi source-path)
+  if (!(Test-Path -Path $path)) { New-Item -ItemType Directory -Path $path -Force }
+
   $paths = (chezmoi list --path-style source-absolute) -split "`n" | 
     Where-Object { $_ -notmatch "chezmoiscripts" }
 

@@ -22,7 +22,6 @@ Set-Alias envrld Invoke-Env-Reload
 Set-Alias chsync Invoke-Chezmoi-Sync
 
 ## Function aliases ##
-# Listings #
 function .. { cd .. }
 # (needs to be as function due to 'ls' is already alias for Set-Location)
 function override-ls { wsl exec exa --icons }
@@ -37,11 +36,14 @@ function ff {
   elseif ($output -and (Test-Path $output -PathType Leaf)) { vim $output }
 }
 
+## Utility scripts ##
+function winutil { . $HOME\.config\pwsh\scripts\winutil.ps1 }
+
 ## PowerShell variables ##
 Set-Variable "PROFILE" "$HOME\.config\pwsh\profile.ps1"
+Set-Variable "CH_MANAGED" "$HOME\.config\ch\managed.json"
 Set-Variable "CONFIG_POWERSHELL" "$HOME\.config\pwsh\profile.ps1"
 Set-Variable "CONFIG_VIM" "$HOME\.config\nvim\init.vim"
-Set-Variable "CONFIG_CHEZMOI" "$HOME\.config\ch\managed.json"
 
 ## Themes ##
 oh-my-posh init pwsh --config $HOME\.config\omp\fluent.json | Invoke-Expression
