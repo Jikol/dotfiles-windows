@@ -3,9 +3,9 @@ Host vsbsrv
   User jav0032
 
 Host retina-staging
-  HostName 3.123.200.77
+  HostName retina-staging.jikol.dev
   User admin
 
 Host retina-production
-  HostName 52.58.198.193
+  HostName retina-production.jikol.dev
   User admin

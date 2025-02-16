@@ -10,6 +10,7 @@ Import-Module -Name PSReadLine
 
 ## Aliases ##
 Set-Alias csl cls
+Set-Alias g git
 Set-Alias sudo gsudo
 Set-Alias vim nvim
 Set-Alias ip ipconfig
@@ -28,9 +29,13 @@ function override-ls { wsl exec exa --icons }
 function ll { wsl exec exa -l --icons }
 function la { wsl exec exa -la --icons }
 function l { wsl exec tmux new-session -A -s main }
-function chcd { cd $(chezmoi source-path) }
+function chcd { cd "$(chezmoi source-path)\.." }
+function f {
+  $env:FZF_DEFAULT_COMMAND="fd --hidden --no-ignore --type d"
+  $output = fzf --height ~100% --layout reverse --style minimal | Set-Location
+}
 function ff {
-  $env:FZF_DEFAULT_COMMAND="fd --hidden"
+  $env:FZF_DEFAULT_COMMAND="fd --hidden --no-ignore --type d && fd --hidden --no-ignore --type f"
   $output = fzf --preview "bat -pf {} || ls -a {}" --height ~100% --layout reverse --style minimal
   if ($output -and (Test-Path $output -PathType Container)) { Set-Location $output }
   elseif ($output -and (Test-Path $output -PathType Leaf)) { vim $output }
@@ -57,7 +62,6 @@ $env:FZF_DEFAULT_OPTS=@"
 
 ## Initialization ##
 Invoke-Expression (& { (zoxide init powershell | Out-String) })
-Set-PsFzfOption -PSReadlineChordReverseHistory "Ctrl+y"
 Set-PSReadLineOption -PredictionSource History
 Set-PSReadLineOption -PredictionViewStyle ListView
 
