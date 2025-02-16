@@ -1,7 +1,6 @@
 Write-Host "Reloading User Profile..." -ForegroundColor Cyan
 
 ## Import modules
-Import-Module -Name PSFzf
 Import-Module -Name PSReadLine
 
 ## Import functions ##
@@ -11,6 +10,7 @@ Import-Module -Name PSReadLine
 ## Aliases ##
 Set-Alias csl cls
 Set-Alias g git
+Set-Alias gg lazygit
 Set-Alias sudo gsudo
 Set-Alias vim nvim
 Set-Alias ip ipconfig
@@ -32,13 +32,26 @@ function l { wsl exec tmux new-session -A -s main }
 function chcd { cd "$(chezmoi source-path)\.." }
 function f {
   $env:FZF_DEFAULT_COMMAND="fd --hidden --no-ignore --type d"
-  $output = fzf --height ~100% --layout reverse --style minimal | Set-Location
+  $output = fzf --height ~100% --layout reverse --style minimal --preview-window wrap | Set-Location
 }
 function ff {
   $env:FZF_DEFAULT_COMMAND="fd --hidden --no-ignore --type d && fd --hidden --no-ignore --type f"
-  $output = fzf --preview "bat -pf {} || ls -a {}" --height ~100% --layout reverse --style minimal
+  $output = fzf --preview "bat -pf {} || ls -a {}" --height ~100% --layout reverse --style minimal --preview-window wrap
   if ($output -and (Test-Path $output -PathType Container)) { Set-Location $output }
   elseif ($output -and (Test-Path $output -PathType Leaf)) { vim $output }
+}
+function fs {
+  $apps = New-Object System.Collections.ArrayList
+  Get-ChildItem "$(Split-Path $(Get-Command scoop -ErrorAction Ignore).Path)\..\buckets" | ForEach-Object {
+    $bucket = $_.Name
+    Get-ChildItem "$($_.FullName)\bucket" | ForEach-Object {
+      $apps.Add($bucket + '/' + ($_.Name -replace '.json', '')) > $null
+    }
+  }
+  $output = $apps | fzf --preview "scoop info {}" --height ~100% --layout reverse --style minimal --multi --preview-window wrap
+  if ($null -ne $output) {
+    Invoke-Expression "scoop install $($output -join ' ')"
+  }
 }
 
 ## Utility scripts ##

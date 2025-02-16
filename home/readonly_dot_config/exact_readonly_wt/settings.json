@@ -390,6 +390,10 @@
         {
             "command": "unbound",
             "keys": "ctrl+right"
+        },
+        {
+            "command": "unbound",
+            "keys": "alt+enter"
         }
     ],
     "alwaysOnTop": false,

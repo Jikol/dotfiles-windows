@@ -44,6 +44,10 @@
     "attributes": ["exact", "readonly"]
   },
   {
+    "path": "~/.config/lazygit",
+    "attributes": ["exact", "readonly"]
+  },
+  {
     "path": "~/.config/wt",
     "attributes": ["exact", "readonly"]
   }
