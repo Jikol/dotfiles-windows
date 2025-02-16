@@ -70,7 +70,7 @@ powercfg -change -disk-timeout-ac 0
 
 # Check for network availability #
 Write-Host "Checking for network availability" -ForegroundColor Cyan
-if (-Not Test-Connection -ComputerName 8.8.8.8 -Count 3 -Quiet) {
+if (! (Test-Connection -ComputerName 8.8.8.8 -Count 3 -Quiet)) {
   Write-Host "Network is unavailable, check your connection and try again" -ForegroundColor Red
   Stop-Transcript
   
