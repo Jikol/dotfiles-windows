@@ -48,6 +48,10 @@
     "attributes": ["exact", "readonly"]
   },
   {
+    "path": "~/.config/lazydocker",
+    "attributes": ["exact", "readonly"]
+  },
+  {
     "path": "~/.config/wt",
     "attributes": ["exact", "readonly"]
   }

@@ -11,6 +11,8 @@ Import-Module -Name PSReadLine
 Set-Alias csl cls
 Set-Alias g git
 Set-Alias gg lazygit
+Set-Alias d docker
+Set-Alias dd lazydocker
 Set-Alias sudo gsudo
 Set-Alias vim nvim
 Set-Alias ip ipconfig
@@ -30,6 +32,7 @@ function ll { wsl exec exa -l --icons }
 function la { wsl exec exa -la --icons }
 function l { wsl exec tmux new-session -A -s main }
 function chcd { cd "$(chezmoi source-path)\.." }
+function chmanaged { vim "$HOME\.config\ch\managed.json" }
 function f {
   $env:FZF_DEFAULT_COMMAND="fd --hidden --no-ignore --type d"
   $output = fzf --height ~100% --layout reverse --style minimal --preview-window wrap | Set-Location
@@ -59,7 +62,6 @@ function winutil { . $HOME\.config\pwsh\scripts\winutil.ps1 }
 
 ## PowerShell variables ##
 Set-Variable "PROFILE" "$HOME\.config\pwsh\profile.ps1"
-Set-Variable "CH_MANAGED" "$HOME\.config\ch\managed.json"
 Set-Variable "CONFIG_POWERSHELL" "$HOME\.config\pwsh\profile.ps1"
 Set-Variable "CONFIG_VIM" "$HOME\.config\nvim\init.vim"
 
