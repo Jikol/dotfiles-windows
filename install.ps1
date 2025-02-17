@@ -32,23 +32,32 @@ function Install-Script {
     Stop-Instalation -Message $errorMessage
   }
 }
+
 ## Leverage access control (ensuring that the script is always run as administrator, otherwise it will not run) ##
 $principal = New-Object System.Security.Principal.WindowsPrincipal([System.Security.Principal.WindowsIdentity]::GetCurrent())
 if (! $principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)) {
   Write-Host "Attempt to start elevated process" -ForegroundColor Yellow
   try {
-    $proc = Start-Process powershell.exe -ArgumentList "-NoExit -File `"$PSCommandPath`"" -Verb RunAs -PassThru
+    $scriptPath = $null
+    if ($MyInvocation.MyCommand.Path) {
+      $scriptPath = $MyInvocation.MyCommand.Path
+    } else {
+      $scriptContent = Invoke-RestMethod -Uri "https://raw.githubusercontent.com/Jikol/dotconfig-windows/refs/heads/master/install.ps1"
+      Set-Content -Path "$env:TEMP\install.ps1" -Value $scriptContent 
+      $scriptPath = "$env:TEMP\install.ps1"
+    }
+    $proc = Start-Process powershell.exe -ArgumentList "-NoExit -File `"$scriptPath`"" -Verb RunAs -PassThru
     if ($null -eq $proc) { throw "Could not start the elevated process" }
     $proc.WaitForExit()
     if ($proc.ExitCode -ne 0) { throw "Script execution failed: $(Get-Env -Name "EXIT_MESSAGE")" }
     Write-Host "Installation script run succesfully" -ForegroundColor Green
-    
-    exit
+
+    if ($MyInvocation.MyCommand.Path) { exit } else { return }
   } catch {
     Write-Host "$_" -ForegroundColor Red
     Set-Env -Name "EXIT_MESSAGE" -Delete
 
-    exit 1
+    if ($MyInvocation.MyCommand.Path) { exit 1 } else { return }
   }
 }
 
