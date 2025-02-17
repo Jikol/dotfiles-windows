@@ -21,15 +21,21 @@ function Install-Script {
     [string]$programCli
   )
   try {
-    Write-Host "Installing $programName package manager ($programCli)" -ForegroundColor Cyan
-    Invoke-RestMethod -Uri $url | Invoke-Expression
-    Sync-Env
     Get-Command $programCli -ErrorAction Stop
-    Write-Host "$programName has been successfully installed" -ForegroundColor Green
+    Write-Host "$programName is already installed" -ForegroundColor Green
     & $programCli --version
   } catch {
-    $errorMessage = "Failed to download and install $programName (Error: $_)"
-    Stop-Instalation -Message $errorMessage
+    try {
+      Write-Host "Installing $programName package manager ($programCli)" -ForegroundColor Cyan
+      Invoke-RestMethod -Uri $url | Invoke-Expression
+      Sync-Env
+      Get-Command $programCli -ErrorAction Stop
+      Write-Host "$programName has been successfully installed" -ForegroundColor Green
+      & $programCli --version
+    } catch {
+      $errorMessage = "Failed to download and install $programName (Error: $_)"
+      Stop-Instalation -Message $errorMessage
+    }
   }
 }
 
@@ -71,6 +77,7 @@ Start-Transcript -Path "$logPath\install_$dateTime.log" -Append -Force -NoClobbe
 Write-Host "Creating log file at $logPath\install_$dateTime.log" -ForegroundColor Cyan
 
 # Create a system restore point #
+<#
 Write-Host "Creating a system restore point" -ForegroundColor Cyan
 $restorePointName = "pre_install_$currentDateTime"
 try {
@@ -80,6 +87,7 @@ try {
   $errorMessage = "Failed to create system restore point"
   Stop-Instalation -Message $errorMessage
 }
+#>
 
 # Setting PowerShell to UTF-8 encoding #
 Write-Host "Setting PowerShell to UTF-8 encoding" -ForegroundColor Cyan
@@ -116,35 +124,49 @@ if (! (Test-Connection -ComputerName 8.8.8.8 -Count 3 -Quiet)) {
 $url = "https://github.com/microsoft/WSL/releases/download/2.4.11/wsl.2.4.11.0.x64.msi"
 $destinationPath = "$env:TEMP\wsl.2.4.11.0.x64.msi"
 try {
-  Write-Host "Installing windows subsystem for linux (WSL)" -ForegroundColor Cyan
-  Invoke-WebRequest -Uri $url -OutFile $destinationPath -ErrorAction Stop
-  Start-Process -FilePath $destinationPath -ArgumentList "/quiet" -Wait -ErrorAction Stop
-  Sync-Env
   Get-Command wsl -ErrorAction Stop
-  wsl --update
-  Write-Host "WSL has been successfully installed" -ForegroundColor Green
+  Write-Host "WSL is already installed" -ForegroundColor Green
   wsl --version
   wsl --status
 } catch {
-  $errorMessage = "Failed to download and install WSL (Error: $_)"
-  Stop-Instalation -Message $errorMessage
+  try {
+    Write-Host "Installing windows subsystem for linux (WSL)" -ForegroundColor Cyan
+    Invoke-WebRequest -Uri $url -OutFile $destinationPath -ErrorAction Stop
+    Start-Process -FilePath $destinationPath -ArgumentList "/quiet" -Wait -ErrorAction Stop
+    Sync-Env
+    Get-Command wsl -ErrorAction Stop
+    wsl --update
+    Write-Host "WSL has been successfully installed" -ForegroundColor Green
+    wsl --version
+    wsl --status
+  } catch {
+    $errorMessage = "Failed to download and install WSL (Error: $_)"
+    Stop-Instalation -Message $errorMessage
+  }
 }
 
 # Winget #
 $url = "https://github.com/microsoft/winget-cli/releases/download/v1.9.25200/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
 $destinationPath = "$env:TEMP\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
 try {
-  Write-Host "Installing windows package manager (Winget)" -ForegroundColor Cyan
-  Invoke-WebRequest -Uri $url -OutFile $destinationPath -ErrorAction Stop
-  Add-AppxPackage -Path $destinationPath -ErrorAction Stop
-  Sync-Env
   Get-Command winget -ErrorAction Stop
-  Write-Host "Winget has been successfully installed" -ForegroundColor Green
-  winget --version
-  winget --info
+  Write-Host "WSL is already installed" -ForegroundColor Green
+  wsl --version
+  wsl --info
 } catch {
-  $errorMessage = "Failed to download and install Winget (Error: $_)"
-  Stop-Instalation -Message $errorMessage
+  try {
+    Write-Host "Installing windows package manager (Winget)" -ForegroundColor Cyan
+    Invoke-WebRequest -Uri $url -OutFile $destinationPath -ErrorAction Stop
+    Add-AppxPackage -Path $destinationPath -ErrorAction Stop
+    Sync-Env
+    Get-Command winget -ErrorAction Stop
+    Write-Host "Winget has been successfully installed" -ForegroundColor Green
+    winget --version
+    winget --info
+  } catch {
+    $errorMessage = "Failed to download and install Winget (Error: $_)"
+    Stop-Instalation -Message $errorMessage
+  }
 }
 
 # Chocolatey #
