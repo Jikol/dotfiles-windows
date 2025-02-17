@@ -1,25 +1,53 @@
 ### Script for installing development tools and their settings in Windows 11 21H2 ###
 
-## Helper Functions ##
-function Invoke-List-Variable{[CmdletBinding()][OutputType([string])]param([Parameter(Mandatory=$true)][string]$name,[Parameter(Mandatory=$true)][System.EnvironmentVariableTarget]$scope)return[Environment]::GetEnvironmentVariable($name,$scope)}
-function Invoke-Env-Reload{$userName=$env:USERNAME;$architecture=$env:PROCESSOR_ARCHITECTURE;$psModulePath=$env:PSModulePath;$scopeList="Process","Machine";if("SYSTEM","${env:COMPUTERNAME}`$"-notcontains $userName){$scopeList+="User"}foreach($scope in $scopeList){$envList=[string]::Empty;switch($scope){"User"{$envList=Get-Item "HKCU:\Environment" -ErrorAction SilentlyContinue|Select-Object -ExpandProperty Property}"Machine"{$envList=Get-Item "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Environment"|Select-Object -ExpandProperty Property}"Process"{$envList=Get-ChildItem Env:\|Select-Object -ExpandProperty Key}};$envList|ForEach-Object{Set-Item "Env:$_"-Value(Invoke-List-Variable -scope $scope -name $_)}};$paths="Machine","User"|ForEach-Object{(Invoke-List-Variable -name "Path" -scope $_)-split ';'}|Select-Object -Unique;$env:Path=$paths-join ';';$env:PSModulePath=$psModulePath;if($userName){$env:USERNAME=$userName};if($architecture){$env:PROCESSOR_ARCHITECTURE=$architecture}}
-function Invoke-Command-Install{param([string]$url,[string]$programName,[string]$programCli)try{Write-Host "Installing $programName package manager ($programCli)" -ForegroundColor Cyan;Invoke-RestMethod -Uri $url|Invoke-Expression;Invoke-Env-Reload;Get-Command $programCli -ErrorAction Stop;Write-Host "$programName has been successfully installed" -ForegroundColor Green;& $programCli --version}catch{Write-Host "Failed to download and install $programName (Error: $_)" -ForegroundColor Red;Stop-Transcript;exit 1}}
-
+## Helper functions ##
+function Get-Env{[OutputType([string])][CmdletBinding()]param([string]$name,[System.EnvironmentVariableTarget]$scope=[System.EnvironmentVariableTarget]::User)return [Environment]::GetEnvironmentVariable($name,$scope)}
+function Set-Env{param([string]$name,[string]$value,[switch]$delete,[System.EnvironmentVariableTarget]$scope=[System.EnvironmentVariableTarget]::User)if($delete){[Environment]::SetEnvironmentVariable($name,$null,$scope)}[Environment]::SetEnvironmentVariable($name,$value,$scope)}
+function Sync-Env{$userName=$env:USERNAME;$architecture=$env:PROCESSOR_ARCHITECTURE;$psModulePath=$env:PSModulePath;$scopeList="Process","Machine";if("SYSTEM","${env:COMPUTERNAME}`$"-notcontains $userName){$scopeList+="User"}foreach($scope in $scopeList){$envList=[string]::Empty;switch($scope){"User"{$envList=Get-Item "HKCU:\Environment" -ErrorAction SilentlyContinue|Select-Object -ExpandProperty Property}"Machine"{$envList=Get-Item "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Environment"|Select-Object -ExpandProperty Property}"Process"{$envList=Get-ChildItem Env:\|Select-Object -ExpandProperty Key}};$envList|ForEach-Object{Set-Item "Env:$_"-Value(Get-Env -scope $scope -name $_)}};$paths="Machine","User"|ForEach-Object{(Get-Env -name "Path" -scope $_)-split ';'}|Select-Object -Unique;$env:Path=$paths-join ';';$env:PSModulePath=$psModulePath;if($userName){$env:USERNAME=$userName};if($architecture){$env:PROCESSOR_ARCHITECTURE=$architecture}}
+function Stop-Instalation {
+  param(
+    [string]$message
+  )
+  Write-Host $message -ForegroundColor Red
+  Stop-Transcript
+  pause
+  Set-Env -Name "EXIT_MESSAGE" -Value $message
+  Stop-Process -Id $PID -Force
+}
+function Install-Script {
+  param(
+    [string]$url,
+    [string]$programName,
+    [string]$programCli
+  )
+  try {
+    Write-Host "Installing $programName package manager ($programCli)" -ForegroundColor Cyan
+    Invoke-RestMethod -Uri $url | Invoke-Expression
+    Sync-Env
+    Get-Command $programCli -ErrorAction Stop
+    Write-Host "$programName has been successfully installed" -ForegroundColor Green
+    & $programCli --version
+  } catch {
+    $errorMessage = "Failed to download and install $programName (Error: $_)"
+    Stop-Instalation -Message $errorMessage
+  }
+}
 ## Leverage access control (ensuring that the script is always run as administrator, otherwise it will not run) ##
 $principal = New-Object System.Security.Principal.WindowsPrincipal([System.Security.Principal.WindowsIdentity]::GetCurrent())
 if (! $principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)) {
   Write-Host "Attempt to start elevated process" -ForegroundColor Yellow
   try {
-    $proc = Start-Process powershell.exe -ArgumentList "-File `"$PSCommandPath`"" -Verb RunAs -PassThru
-    if ($proc -eq $null) { throw }
+    $proc = Start-Process powershell.exe -ArgumentList "-NoExit -File `"$PSCommandPath`"" -Verb RunAs -PassThru
+    if ($null -eq $proc) { throw "Could not start the elevated process" }
+    $proc.WaitForExit()
+    if ($proc.ExitCode -ne 0) { throw "Script execution failed: $(Get-Env -Name "EXIT_MESSAGE")" }
     Write-Host "Installation script run succesfully" -ForegroundColor Green
-    cmd /c pause
     
     exit
   } catch {
-    Write-Host "Failed to start script with elevated access" -ForegroundColor Red
-    cmd /c pause
-    
+    Write-Host "$_" -ForegroundColor Red
+    Set-Env -Name "EXIT_MESSAGE" -Delete
+
     exit 1
   }
 }
@@ -40,10 +68,8 @@ try {
   Checkpoint-Computer -Description $restorePointName -RestorePointType "MODIFY_SETTINGS"
   Write-Host "System restore point created successfully" -ForegroundColor Green
 } catch {
-  Write-Host "Failed to create system restore point" -ForegroundColor Red
-  Stop-Transcript
-  
-  exit 1
+  $errorMessage = "Failed to create system restore point"
+  Stop-Instalation -Message $errorMessage
 }
 
 # Setting PowerShell to UTF-8 encoding #
@@ -71,10 +97,8 @@ powercfg -change -disk-timeout-ac 0
 # Check for network availability #
 Write-Host "Checking for network availability" -ForegroundColor Cyan
 if (! (Test-Connection -ComputerName 8.8.8.8 -Count 3 -Quiet)) {
-  Write-Host "Network is unavailable, check your connection and try again" -ForegroundColor Red
-  Stop-Transcript
-  
-  exit 1
+  $errorMessage = "Network is unavailable, check your connection and try again"
+  Stop-Instalation -Message $errorMessage
 }
 
 ## Package Managers installation ##
@@ -86,17 +110,15 @@ try {
   Write-Host "Installing windows subsystem for linux (WSL)" -ForegroundColor Cyan
   Invoke-WebRequest -Uri $url -OutFile $destinationPath -ErrorAction Stop
   Start-Process -FilePath $destinationPath -ArgumentList "/quiet" -Wait -ErrorAction Stop
-  Invoke-Env-Reload
+  Sync-Env
   Get-Command wsl -ErrorAction Stop
   wsl --update
   Write-Host "WSL has been successfully installed" -ForegroundColor Green
   wsl --version
   wsl --status
 } catch {
-  Write-Host "Failed to download and install WSL (Error: $_)" -ForegroundColor Red
-  Stop-Transcript
-
-  exit 1
+  $errorMessage = "Failed to download and install WSL (Error: $_)"
+  Stop-Instalation -Message $errorMessage
 }
 
 # Winget #
@@ -106,27 +128,25 @@ try {
   Write-Host "Installing windows package manager (Winget)" -ForegroundColor Cyan
   Invoke-WebRequest -Uri $url -OutFile $destinationPath -ErrorAction Stop
   Add-AppxPackage -Path $destinationPath -ErrorAction Stop
-  Invoke-Env-Reload
+  Sync-Env
   Get-Command winget -ErrorAction Stop
   Write-Host "Winget has been successfully installed" -ForegroundColor Green
   winget --version
   winget --info
 } catch {
-  Write-Host "Failed to download and install Winget (Error: $_)" -ForegroundColor Red
-  Stop-Transcript
-
-  exit 1
+  $errorMessage = "Failed to download and install Winget (Error: $_)"
+  Stop-Instalation -Message $errorMessage
 }
 
 # Chocolatey #
-Invoke-Command-Install -url "https://community.chocolatey.org/install.ps1" -programName "Chocolatey" -programCli "choco"
+Install-Script -Url "https://community.chocolatey.org/install.ps1" -ProgramName "Chocolatey" -ProgramCli "choco"
 
 # Scoop #
-Invoke-Command-Install -url "https://get.scoop.sh" -programName "Scoop" -programCli "scoop"
+Install-Script -Url "https://get.scoop.sh" -ProgramName "Scoop" -ProgramCli "scoop"
 
 ## Program installation ##
 
 # Stop logging #
 Stop-Transcript
 
-cmd /c pause
+[System.Environment]::Exit(0)
