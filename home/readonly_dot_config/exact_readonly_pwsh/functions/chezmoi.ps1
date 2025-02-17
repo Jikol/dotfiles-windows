@@ -10,7 +10,7 @@ function Invoke-Chezmoi-Sync {
     Write-Host "$path removed from managed files" -ForegroundColor Yellow
   }
 
-  $managed = Get-Content -Path "$HOME\.config\ch\managed.json" | ConvertFrom-Json
+  $managed = Get-Content -Path "$env:CHEZMOI_LOCAL_PATH\managed.json" | ConvertFrom-Json
   foreach ($i in $managed) {
     $path = Resolve-Path $i.path
     chezmoi add --secrets ignore $path

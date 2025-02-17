@@ -40,10 +40,6 @@
     "attributes": ["exact", "readonly"]
   },
   {
-    "path": "~/.config/ch",
-    "attributes": ["exact", "readonly"]
-  },
-  {
     "path": "~/.config/lazygit",
     "attributes": ["exact", "readonly"]
   },

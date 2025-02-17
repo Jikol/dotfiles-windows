@@ -31,8 +31,8 @@ function override-ls { wsl exec exa --icons }
 function ll { wsl exec exa -l --icons }
 function la { wsl exec exa -la --icons }
 function l { wsl exec tmux new-session -A -s main }
-function chcd { cd "$(chezmoi source-path)\.." }
-function chmanaged { vim "$HOME\.config\ch\managed.json" }
+function chcd { cd "$env:CHEZMOI_LOCAL_PATH" }
+function chmanaged { vim "$env:CHEZMOI_LOCAL_PATH\managed.json" }
 function f {
   $env:FZF_DEFAULT_COMMAND="fd --hidden --no-ignore --type d"
   $output = fzf --height ~100% --layout reverse --style minimal --preview-window wrap | Set-Location

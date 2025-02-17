@@ -184,4 +184,5 @@ scoop status
 # Stop logging #
 Stop-Transcript
 
+pause
 [System.Environment]::Exit(0)
