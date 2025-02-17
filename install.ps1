@@ -4,6 +4,7 @@
 function Get-Env{[OutputType([string])][CmdletBinding()]param([string]$name,[System.EnvironmentVariableTarget]$scope=[System.EnvironmentVariableTarget]::User)return [Environment]::GetEnvironmentVariable($name,$scope)}
 function Set-Env{param([string]$name,[string]$value,[switch]$delete,[System.EnvironmentVariableTarget]$scope=[System.EnvironmentVariableTarget]::User)if($delete){[Environment]::SetEnvironmentVariable($name,$null,$scope)}[Environment]::SetEnvironmentVariable($name,$value,$scope)}
 function Sync-Env{$userName=$env:USERNAME;$architecture=$env:PROCESSOR_ARCHITECTURE;$psModulePath=$env:PSModulePath;$scopeList="Process","Machine";if("SYSTEM","${env:COMPUTERNAME}`$"-notcontains $userName){$scopeList+="User"}foreach($scope in $scopeList){$envList=[string]::Empty;switch($scope){"User"{$envList=Get-Item "HKCU:\Environment" -ErrorAction SilentlyContinue|Select-Object -ExpandProperty Property}"Machine"{$envList=Get-Item "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Environment"|Select-Object -ExpandProperty Property}"Process"{$envList=Get-ChildItem Env:\|Select-Object -ExpandProperty Key}};$envList|ForEach-Object{Set-Item "Env:$_"-Value(Get-Env -scope $scope -name $_)}};$paths="Machine","User"|ForEach-Object{(Get-Env -name "Path" -scope $_)-split ';'}|Select-Object -Unique;$env:Path=$paths-join ';';$env:PSModulePath=$psModulePath;if($userName){$env:USERNAME=$userName};if($architecture){$env:PROCESSOR_ARCHITECTURE=$architecture}}
+function Stop-Instalation{param([string]$message)Write-Host $message -ForegroundColor Red;Stop-Transcript;pause;Set-Env -Name "EXIT_MESSAGE" -Value $message;Stop-Process -Id $PID -Force}
 
 ## Leverage access control (ensuring that the script is always run as administrator, otherwise it will not run) ##
 $principal = New-Object System.Security.Principal.WindowsPrincipal([System.Security.Principal.WindowsIdentity]::GetCurrent())
@@ -35,12 +36,26 @@ if (! $principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Admini
 
 ## Precursor initialization ##
 
-# Generate log file & start logging #
 $dateTime = Get-Date -Format "yyyy-MM-dd_HH-mm-ss"
-$logPath = "$env:localappdata\install\logs"
+
+# Generate log file & start logging #
+$logPath = "$env:LOCALAPPDATA\install\logs"
 [System.IO.Directory]::CreateDirectory("$logPath") | Out-Null
 Start-Transcript -Path "$logPath\install_$dateTime.log" -Append -Force -NoClobber | Out-Null
 Write-Host "Creating log file at $logPath\install_$dateTime.log" -ForegroundColor Cyan
+
+# Create registry backup #
+$backupPath = "$env:LOCALAPPDATA\install\backups"
+[System.IO.Directory]::CreateDirectory("$backupPath") | Out-Null
+$backupFile = "$backupPath\RegistryBackup_$dateTime.reg"
+try {
+  Write-Host "Creating a registry backup at $backupPath\RegistryBackup_$dateTime.reg" -ForegroundColor Cyan
+  reg export HKLM $backupFile /y
+  Write-Host "Registry backup created at $backupFile" -ForegroundColor Green
+} catch {
+  $errorMessage = "Failed to create registry backup (Error: $_)"
+  Stop-Instalation -Message $errorMessage
+}
 
 # Create a system restore point #
 <#
@@ -54,6 +69,7 @@ try {
   Stop-Instalation -Message $errorMessage
 }
 #>
+
 
 # Setting PowerShell to UTF-8 encoding #
 Write-Host "Setting PowerShell to UTF-8 encoding" -ForegroundColor Cyan
@@ -84,6 +100,40 @@ if (! (Test-Connection -ComputerName 8.8.8.8 -Count 3 -Quiet)) {
   Stop-Instalation -Message $errorMessage
 }
 
+## Precursor cleanup ##
+
+# Delete default start menu shortcuts #
+$startmenuShortcuts = @(
+  "$env:APPDATA\Microsoft\Windows\Start Menu\Programs",
+  "$env:PROGRAMDATA\Microsoft\Windows\Start Menu\Programs"
+)
+foreach ($dir in $startmenuShortcuts) {
+  try {
+    Get-ChildItem -Path $dir -Recurse -Force | Remove-Item -Recurse -Force
+    Write-Host "All start menu shortcuts in $dir have been deleted" -ForegroundColor Yellow
+  } catch {
+    $errorMessage = "Failed to delete files in $dir (Error: $_)"
+    Stop-Instalation -Message $errorMessage
+  }
+}
+
+# Delete default startup logon shortcuts #
+$registryKey = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
+try {
+  Get-Item -Path $registryKey | Get-ItemProperty | ForEach-Object {
+    $names = $_.PSObject.Properties.Name
+    foreach ($name in $names) {
+      if ($name -notin @("PSPath", "PSParentPath", "PSChildName", "PSDrive", "PSProvider")) {
+        Remove-ItemProperty -Path $registryKey -Name $name -ErrorAction Stop
+      }
+    }
+  }
+  Write-Host "All startup program entries in $registryKey have been deleted" -ForegroundColor Yellow
+} catch {
+  $errorMessage = "Failed to clear startup programs in $registryKey (Error: $_)"
+  Stop-Instalation -Message $errorMessage
+}
+
 ## Package Managers installation ##
 
 # WSL #
@@ -105,9 +155,9 @@ try {
     Stop-Instalation -Message $errorMessage
   }
 }
-Write-Host "Attempt to update"
+Write-Host "Attempt to update" -ForegroundColor Yellow
 wsl --update
-Write-Host "Current state & version"
+Write-Host "Current state & version" -ForegroundColor Cyan
 wsl --version
 wsl --status
 
@@ -116,7 +166,7 @@ $url = "https://github.com/microsoft/winget-cli/releases/download/v1.9.25200/Mic
 $destinationPath = "$env:TEMP\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
 try {
   Get-Command winget -ErrorAction Stop
-  Write-Host "WSL is already installed" -ForegroundColor Green
+  Write-Host "WinGet is already installed" -ForegroundColor Green
 } catch {
   try {
     Write-Host "Installing windows package manager (Winget)" -ForegroundColor Cyan
@@ -130,7 +180,7 @@ try {
     Stop-Instalation -Message $errorMessage
   }
 }
-Write-Host "Current info & version"
+Write-Host "Current info & version" -ForegroundColor Cyan
 winget --version
 winget --info
 
@@ -151,9 +201,9 @@ try {
     Stop-Instalation -Message $errorMessage
   }
 }
-Write-Host "Attempt to update"
+Write-Host "Attempt to update" -ForegroundColor Yellow
 choco upgrade chocolatey
-Write-Host "Current version"
+Write-Host "Current version" -ForegroundColor Cyan
 choco --version
 
 # Scoop #
@@ -173,9 +223,9 @@ try {
     Stop-Instalation -Message $errorMessage
   }
 }
-Write-Host "Attempt to update"
+Write-Host "Attempt to update" -ForegroundColor Yellow
 scoop update
-Write-Host "Current bucket versions & status"
+Write-Host "Current bucket versions & status" -ForegroundColor Cyan
 scoop --version
 scoop status
 
