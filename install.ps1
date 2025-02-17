@@ -4,40 +4,6 @@
 function Get-Env{[OutputType([string])][CmdletBinding()]param([string]$name,[System.EnvironmentVariableTarget]$scope=[System.EnvironmentVariableTarget]::User)return [Environment]::GetEnvironmentVariable($name,$scope)}
 function Set-Env{param([string]$name,[string]$value,[switch]$delete,[System.EnvironmentVariableTarget]$scope=[System.EnvironmentVariableTarget]::User)if($delete){[Environment]::SetEnvironmentVariable($name,$null,$scope)}[Environment]::SetEnvironmentVariable($name,$value,$scope)}
 function Sync-Env{$userName=$env:USERNAME;$architecture=$env:PROCESSOR_ARCHITECTURE;$psModulePath=$env:PSModulePath;$scopeList="Process","Machine";if("SYSTEM","${env:COMPUTERNAME}`$"-notcontains $userName){$scopeList+="User"}foreach($scope in $scopeList){$envList=[string]::Empty;switch($scope){"User"{$envList=Get-Item "HKCU:\Environment" -ErrorAction SilentlyContinue|Select-Object -ExpandProperty Property}"Machine"{$envList=Get-Item "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Environment"|Select-Object -ExpandProperty Property}"Process"{$envList=Get-ChildItem Env:\|Select-Object -ExpandProperty Key}};$envList|ForEach-Object{Set-Item "Env:$_"-Value(Get-Env -scope $scope -name $_)}};$paths="Machine","User"|ForEach-Object{(Get-Env -name "Path" -scope $_)-split ';'}|Select-Object -Unique;$env:Path=$paths-join ';';$env:PSModulePath=$psModulePath;if($userName){$env:USERNAME=$userName};if($architecture){$env:PROCESSOR_ARCHITECTURE=$architecture}}
-function Stop-Instalation {
-  param(
-    [string]$message
-  )
-  Write-Host $message -ForegroundColor Red
-  Stop-Transcript
-  pause
-  Set-Env -Name "EXIT_MESSAGE" -Value $message
-  Stop-Process -Id $PID -Force
-}
-function Install-Script {
-  param(
-    [string]$url,
-    [string]$programName,
-    [string]$programCli
-  )
-  try {
-    Get-Command $programCli -ErrorAction Stop
-    Write-Host "$programName is already installed" -ForegroundColor Green
-    & $programCli --version
-  } catch {
-    try {
-      Write-Host "Installing $programName package manager ($programCli)" -ForegroundColor Cyan
-      Invoke-RestMethod -Uri $url | Invoke-Expression
-      Sync-Env
-      Get-Command $programCli -ErrorAction Stop
-      Write-Host "$programName has been successfully installed" -ForegroundColor Green
-      & $programCli --version
-    } catch {
-      $errorMessage = "Failed to download and install $programName (Error: $_)"
-      Stop-Instalation -Message $errorMessage
-    }
-  }
-}
 
 ## Leverage access control (ensuring that the script is always run as administrator, otherwise it will not run) ##
 $principal = New-Object System.Security.Principal.WindowsPrincipal([System.Security.Principal.WindowsIdentity]::GetCurrent())
@@ -126,8 +92,6 @@ $destinationPath = "$env:TEMP\wsl.2.4.11.0.x64.msi"
 try {
   Get-Command wsl -ErrorAction Stop
   Write-Host "WSL is already installed" -ForegroundColor Green
-  wsl --version
-  wsl --status
 } catch {
   try {
     Write-Host "Installing windows subsystem for linux (WSL)" -ForegroundColor Cyan
@@ -135,15 +99,17 @@ try {
     Start-Process -FilePath $destinationPath -ArgumentList "/quiet" -Wait -ErrorAction Stop
     Sync-Env
     Get-Command wsl -ErrorAction Stop
-    wsl --update
     Write-Host "WSL has been successfully installed" -ForegroundColor Green
-    wsl --version
-    wsl --status
   } catch {
     $errorMessage = "Failed to download and install WSL (Error: $_)"
     Stop-Instalation -Message $errorMessage
   }
 }
+Write-Host "Attempt to update"
+wsl --update
+Write-Host "Current state & version"
+wsl --version
+wsl --status
 
 # Winget #
 $url = "https://github.com/microsoft/winget-cli/releases/download/v1.9.25200/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
@@ -151,8 +117,6 @@ $destinationPath = "$env:TEMP\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbu
 try {
   Get-Command winget -ErrorAction Stop
   Write-Host "WSL is already installed" -ForegroundColor Green
-  wsl --version
-  wsl --info
 } catch {
   try {
     Write-Host "Installing windows package manager (Winget)" -ForegroundColor Cyan
@@ -161,19 +125,59 @@ try {
     Sync-Env
     Get-Command winget -ErrorAction Stop
     Write-Host "Winget has been successfully installed" -ForegroundColor Green
-    winget --version
-    winget --info
   } catch {
     $errorMessage = "Failed to download and install Winget (Error: $_)"
     Stop-Instalation -Message $errorMessage
   }
 }
+Write-Host "Current info & version"
+winget --version
+winget --info
 
 # Chocolatey #
-Install-Script -Url "https://community.chocolatey.org/install.ps1" -ProgramName "Chocolatey" -ProgramCli "choco"
+$url = "https://community.chocolatey.org/install.ps1"
+try {
+  Get-Command choco -ErrorAction Stop
+  Write-Host "Chocolatey is already installed" -ForegroundColor Green
+} catch {
+  try {
+    Write-Host "Installing Chocolatey package manager" -ForegroundColor Cyan
+    Invoke-RestMethod -Uri $url | Invoke-Expression
+    Sync-Env
+    Get-Command choco -ErrorAction Stop
+    Write-Host "Chocolatey has been successfully installed" -ForegroundColor Green
+  } catch {
+    $errorMessage = "Failed to download and install Chocolatey (Error: $_)"
+    Stop-Instalation -Message $errorMessage
+  }
+}
+Write-Host "Attempt to update"
+choco upgrade chocolatey
+Write-Host "Current version"
+choco --version
 
 # Scoop #
-Install-Script -Url "https://get.scoop.sh" -ProgramName "Scoop" -ProgramCli "scoop"
+$url = "https://get.scoop.sh"
+try {
+  Get-Command scoop -ErrorAction Stop
+  Write-Host "Scoop is already installed" -ForegroundColor Green
+} catch {
+  try {
+    Write-Host "Installing Scoop package manager" -ForegroundColor Cyan
+    Invoke-RestMethod -Uri $url | Invoke-Expression
+    Sync-Env
+    Get-Command scoop -ErrorAction Stop
+    Write-Host "Scoop has been successfully installed" -ForegroundColor Green
+  } catch {
+    $errorMessage = "Failed to download and install Scoop (Error: $_)"
+    Stop-Instalation -Message $errorMessage
+  }
+}
+Write-Host "Attempt to update"
+scoop update
+Write-Host "Current bucket versions & status"
+scoop --version
+scoop status
 
 ## Program installation ##
 
