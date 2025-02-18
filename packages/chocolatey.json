@@ -1,13 +1,4 @@
-[
-  {
-    "name": "1password",
-    "cmd": "",
-    "execPath": "",
-    "envAdd": {
-      "name": "",
-      "value"
-    },
-    "autoStartup": true,
-    "startShortcut": true
-  },
-]
+{
+  "$schema": "",
+  "data": []
+}

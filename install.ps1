@@ -16,8 +16,8 @@ if (! $principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Admini
       $scriptPath = $MyInvocation.MyCommand.Path
     } else {
       $scriptContent = Invoke-RestMethod -Uri "https://raw.githubusercontent.com/Jikol/dotconfig-windows/refs/heads/master/install.ps1"
-      Set-Content -Path "$env:TEMP\install.ps1" -Value $scriptContent 
-      $scriptPath = "$env:TEMP\install.ps1"
+      Set-Content -Path "$env:TEMP/install.ps1" -Value $scriptContent
+      $scriptPath = "$env:TEMP/install.ps1"
     }
     $proc = Start-Process powershell.exe -ArgumentList "-NoExit -File `"$scriptPath`"" -Verb RunAs -PassThru
     if ($null -eq $proc) { throw "Could not start the elevated process" }
@@ -34,22 +34,24 @@ if (! $principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Admini
   }
 }
 
+<#
+
 ## Precursor initialization ##
 
 $dateTime = Get-Date -Format "yyyy-MM-dd_HH-mm-ss"
 
 # Generate log file & start logging #
-$logPath = "$env:LOCALAPPDATA\install\logs"
+$logPath = "$env:LOCALAPPDATA/install/logs"
 [System.IO.Directory]::CreateDirectory("$logPath") | Out-Null
-Start-Transcript -Path "$logPath\install_$dateTime.log" -Append -Force -NoClobber | Out-Null
-Write-Host "Creating log file at $logPath\install_$dateTime.log" -ForegroundColor Cyan
+Start-Transcript -Path "$logPath/install_$dateTime.log" -Append -Force -NoClobber | Out-Null
+Write-Host "Creating log file at $logPath/install_$dateTime.log" -ForegroundColor Cyan
 
 # Create registry backup #
-$backupPath = "$env:LOCALAPPDATA\install\backups"
+$backupPath = "$env:LOCALAPPDATA/install/backups"
 [System.IO.Directory]::CreateDirectory("$backupPath") | Out-Null
-$backupFile = "$backupPath\RegistryBackup_$dateTime.reg"
+$backupFile = "$backupPath/RegistryBackup_$dateTime.reg"
 try {
-  Write-Host "Creating a registry backup at $backupPath\RegistryBackup_$dateTime.reg" -ForegroundColor Cyan
+  Write-Host "Creating a registry backup at $backupPath/RegistryBackup_$dateTime.reg" -ForegroundColor Cyan
   reg export HKLM $backupFile /y
   Write-Host "Registry backup created at $backupFile" -ForegroundColor Green
 } catch {
@@ -58,7 +60,6 @@ try {
 }
 
 # Create a system restore point #
-<#
 Write-Host "Creating a system restore point" -ForegroundColor Cyan
 $restorePointName = "pre_install_$currentDateTime"
 try {
@@ -68,8 +69,6 @@ try {
   $errorMessage = "Failed to create system restore point"
   Stop-Instalation -Message $errorMessage
 }
-#>
-
 
 # Setting PowerShell to UTF-8 encoding #
 Write-Host "Setting PowerShell to UTF-8 encoding" -ForegroundColor Cyan
@@ -85,7 +84,7 @@ Write-Host "Updating TLS 1.2 protocol for communication with web services" -Fore
 
 # Disabling User Access Control (UAC) #
 Write-Host "Disabling User Access Control (UAC)" -ForegroundColor Cyan
-Set-ItemProperty -Path "HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\System" -Name "EnableLUA" -Value 0
+Set-ItemProperty -Path "HKLM:/Software/Microsoft/Windows/CurrentVersion/Policies/System" -Name "EnableLUA" -Value 0
 
 # Preventing the system from going to sleep #
 Write-Host "Preventing the system from going to sleep during installation" -ForegroundColor Cyan
@@ -104,8 +103,8 @@ if (! (Test-Connection -ComputerName 8.8.8.8 -Count 3 -Quiet)) {
 
 # Delete default start menu shortcuts #
 $startmenuShortcuts = @(
-  "$env:APPDATA\Microsoft\Windows\Start Menu\Programs",
-  "$env:PROGRAMDATA\Microsoft\Windows\Start Menu\Programs"
+  "$env:APPDATA/Microsoft/Windows/Start Menu/Programs",
+  "$env:PROGRAMDATA/Microsoft/Windows/Start Menu/Programs"
 )
 foreach ($dir in $startmenuShortcuts) {
   try {
@@ -118,7 +117,7 @@ foreach ($dir in $startmenuShortcuts) {
 }
 
 # Delete default startup logon shortcuts #
-$registryKey = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
+$registryKey = "HKCU:/Software/Microsoft/Windows/CurrentVersion/Run"
 try {
   Get-Item -Path $registryKey | Get-ItemProperty | ForEach-Object {
     $names = $_.PSObject.Properties.Name
@@ -138,7 +137,7 @@ try {
 
 # WSL #
 $url = "https://github.com/microsoft/WSL/releases/download/2.4.11/wsl.2.4.11.0.x64.msi"
-$destinationPath = "$env:TEMP\wsl.2.4.11.0.x64.msi"
+$destinationPath = "$env:TEMP/wsl.2.4.11.0.x64.msi"
 try {
   Get-Command wsl -ErrorAction Stop
   Write-Host "WSL is already installed" -ForegroundColor Green
@@ -163,7 +162,7 @@ wsl --status
 
 # Winget #
 $url = "https://github.com/microsoft/winget-cli/releases/download/v1.9.25200/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
-$destinationPath = "$env:TEMP\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
+$destinationPath = "$env:TEMP/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
 try {
   Get-Command winget -ErrorAction Stop
   Write-Host "WinGet is already installed" -ForegroundColor Green
@@ -229,7 +228,22 @@ Write-Host "Current bucket versions & status" -ForegroundColor Cyan
 scoop --version
 scoop status
 
+#>
+
 ## Program installation ##
+
+# Cocolatey #
+$packages = Get-Content -Path "$env:CHEZMOI_LOCAL_PATH/packages/chocolatey.json" | ConvertFrom-Json
+foreach ($package in $packages) {
+  choco install $package.name -y
+  Get-Command scoop -ErrorAction Stop
+  $path = Resolve-Path $i.path
+  chezmoi add --secrets ignore $path
+  foreach ($attr in $i.attributes) {
+    chezmoi chattr +"$($attr)" $path
+  }
+  Write-Host "$path added to managed files" -ForegroundColor Cyan
+}
 
 # Stop logging #
 Stop-Transcript

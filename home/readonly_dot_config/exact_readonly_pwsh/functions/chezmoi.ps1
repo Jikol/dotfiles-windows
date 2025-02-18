@@ -11,10 +11,10 @@ function Invoke-Chezmoi-Sync {
   }
 
   $managed = Get-Content -Path "$env:CHEZMOI_LOCAL_PATH\managed.json" | ConvertFrom-Json
-  foreach ($i in $managed) {
-    $path = Resolve-Path $i.path
+  foreach ($data in $managed.data) {
+    $path = Resolve-Path $data.path
     chezmoi add --secrets ignore $path
-    foreach ($attr in $i.attributes) {
+    foreach ($attr in $data.attributes) {
       chezmoi chattr +"$($attr)" $path
     }
     Write-Host "$path added to managed files" -ForegroundColor Cyan 

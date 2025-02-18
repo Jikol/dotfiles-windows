@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Managed chezmoi files",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "data": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "attributes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "after",
+                "before",
+                "create",
+                "dot",
+                "empty",
+                "encrypted",
+                "external",
+                "exact",
+                "executable",
+                "literal",
+                "modify",
+                "once",
+                "onchange",
+                "private",
+                "readonly",
+                "remove",
+                "run",
+                "symlink"
+              ]
+            }
+          }
+        },
+        "required": ["path", "attributes"]
+      }
+    }
+  },
+  "required": ["$schema", "data"]
+}

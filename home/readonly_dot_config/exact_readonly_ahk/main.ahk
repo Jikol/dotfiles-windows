@@ -16,15 +16,15 @@ SpawnWindowsTerminal(title, runCommand) {
     WinSetTitle(title)
 }
 
-^!.::
-{
-	SpawnWindowsTerminal("Tmux", "wt --fullscreen -p Tmux")
-	return
+MinimizeWindowsTerminal(title) {
+	if WinActive(title) {
+		WinMinimize
+	}
 }
 
-^!ů::
+^!l::
 {
-	SpawnWindowsTerminal("PowerShell", "wt --fullscreen -p PowerShell")
+	SpawnWindowsTerminal("Tmux", "wt --fullscreen -p Tmux")
 	return
 }
 
