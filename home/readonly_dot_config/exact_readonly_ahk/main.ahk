@@ -2,27 +2,35 @@
 #SingleInstance Force
 Persistent(true)
 
-; = Remap keystrokes ===> ;
-#Space::
-{
-	Send("!{Space}")
+SpawnWindowsTerminal(title, runCommand) {
+    if WinExist(title) {
+        if WinActive(title) {
+            WinMinimize
+        } else {
+            WinMaximize
+        }
+        return
+    }
+    Run(runCommand)
+    WinWaitActive("ahk_class CASCADIA_HOSTING_WINDOW_CLASS")
+    WinSetTitle(title)
 }
 
-^!l::
+^!.::
 {
-	Run("wt --fullscreen -p Tmux",,,&PID)
+	SpawnWindowsTerminal("Tmux", "wt --fullscreen -p Tmux")
 	return
 }
 
-^!p::
+^!ů::
 {
-	Run("wt --fullscreen -p PowerShell",,,&PID)
+	SpawnWindowsTerminal("PowerShell", "wt --fullscreen -p PowerShell")
 	return
 }
 
 ^!z::
 {
-    Run("wt --fullscreen btop",,,&PID)
+	SpawnWindowsTerminal("Btop", "wt --fullscreen btop")
 	return
 }
 
