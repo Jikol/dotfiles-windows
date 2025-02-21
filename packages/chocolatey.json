@@ -1,4 +1,21 @@
 {
-  "$schema": "",
-  "data": []
+  "$schema": "./chocolatey.schema.json",
+  "data": [
+    {
+      "name": "notepadplusplus",
+      "shell": {
+        "cmd": "notepad++",
+        "path": "%PROGRAMFILES%/Notepad++"
+      },
+      "execPath": "%PROGRAMFILES%/Notepad++/notepad++.exe",
+      "envAdd": [
+        {
+          "value": "NOTEPADTEST",
+          "name": "NOTEPAD"
+        }
+      ],
+      "autoStartup": "Notepad++",
+      "startShortcut": "Notepad++"
+    }
+  ]
 }

@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Generated schema for Root",
+  "title": "Chocolatey packages for installation script",
   "type": "object",
   "properties": {
     "$schema": {
@@ -14,41 +14,57 @@
           "name": {
             "type": "string"
           },
-          "cmd": {
-            "type": ["string", "null"]
-          },
-          "execPath": {
-            "type": "string"
-          },
-          "envAdd": {
+          "shell": {
             "type": ["object", "null"],
             "properties": {
-              "name": {
+              "cmd": {
                 "type": "string"
               },
-              "value": {
+              "path": {
                 "type": "string"
               }
             },
-            "required": ["name", "value"]
+            "required": ["cmd", "path"],
+            "additionalProperties": false
+          },
+          "execPath": {
+            "type": ["string", "null"]
+          },
+          "envAdd": {
+            "type": ["array", "null"],
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              },
+              "required": ["name", "value"],
+              "additionalProperties": false
+            }
           },
           "autoStartup": {
-            "type": "boolean"
+            "type": ["boolean", "string"]
           },
           "startShortcut": {
-            "type": "boolean"
+            "type": ["boolean", "string"]
           }
         },
         "required": [
           "name",
-          "cmd",
+          "shell",
           "execPath",
           "envAdd",
           "autoStartup",
           "startShortcut"
-        ]
+        ],
+        "additionalProperties": false
       }
     }
   },
-  "required": ["$schema", "data"]
+  "required": ["$schema", "data"],
+  "additionalProperties": false
 }

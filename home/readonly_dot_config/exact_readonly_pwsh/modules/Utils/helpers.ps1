@@ -1,8 +1,23 @@
-function Invoke-Chezmoi-Sync {
+function Set-Symlink {
+  param(
+    [string]$target,
+    [string]$source
+  )
+  try {
+    $target = Resolve-Path -Path $target -ErrorAction Stop
+    Remove-Item $target -Force -Recurse -ErrorAction Stop
+    New-Item -ItemType SymbolicLink -Path $target -Target $source -ErrorAction Stop | Out-Null
+  } catch {
+    Write-Error "Script execution failed: $_"
+    exit 1
+  }
+}
+
+function Invoke-ChezmoiSync {
   $path = $(chezmoi source-path)
   if (!(Test-Path -Path $path)) { New-Item -ItemType Directory -Path $path -Force }
 
-  $paths = (chezmoi list --path-style source-absolute) -split "`n" | 
+  $paths = (chezmoi list --path-style source-absolute) -split "`n" |
     Where-Object { $_ -notmatch "chezmoiscripts" }
 
   foreach ($path in $paths) {
@@ -17,10 +32,10 @@ function Invoke-Chezmoi-Sync {
     foreach ($attr in $data.attributes) {
       chezmoi chattr +"$($attr)" $path
     }
-    Write-Host "$path added to managed files" -ForegroundColor Cyan 
+    Write-Host "$path added to managed files" -ForegroundColor Cyan
   }
 
-  $output = chezmoi diff
+  $output = chezmoi verify
   if ([string]::IsNullOrWhiteSpace($output)) {
     Write-Host "All chezmoi files synced to source path ($(chezmoi source-path))" -ForegroundColor Green
   } else {

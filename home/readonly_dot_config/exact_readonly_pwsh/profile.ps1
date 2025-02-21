@@ -1,11 +1,10 @@
 Write-Host "Reloading User Profile..." -ForegroundColor Cyan
 
-## Import modules
-Import-Module -Name PSReadLine
+## Import modules ##
+Import-Module PSReadLine
+Import-Module Utils
 
-## Import functions ##
-. $HOME\.config\pwsh\functions\environment.ps1
-. $HOME\.config\pwsh\functions\chezmoi.ps1
+Sync-Env
 
 ## Aliases ##
 Set-Alias csl cls
@@ -19,23 +18,23 @@ Set-Alias ip ipconfig
 Set-Alias cat bat
 Set-Alias ch chezmoi
 Set-Alias ls override-ls
-Set-Alias path Invoke-List-Path
-Set-Alias env Invoke-List-Variable
-Set-Alias envrld Invoke-Env-Reload
-Set-Alias chsync Invoke-Chezmoi-Sync
+Set-Alias path Show-Path
+Set-Alias env Get-Env
+Set-Alias envrld Sync-Env
+Set-Alias chsync Invoke-ChezmoiSync
 
 ## Function aliases ##
-function .. { cd .. }
+function .. { Set-Location .. }
 # (needs to be as function due to 'ls' is already alias for Set-Location)
 function override-ls { wsl exec exa --icons }
 function ll { wsl exec exa -l --icons }
 function la { wsl exec exa -la --icons }
 function l { wsl exec tmux new-session -A -s main }
-function chcd { cd "$env:CHEZMOI_LOCAL_PATH" }
+function chcd { Set-Location "$env:CHEZMOI_LOCAL_PATH" }
 function chmanaged { vim "$env:CHEZMOI_LOCAL_PATH\managed.json" }
 function f {
   $env:FZF_DEFAULT_COMMAND="fd --hidden --no-ignore --type d"
-  $output = fzf --height ~100% --layout reverse --style minimal --preview-window wrap | Set-Location
+  fzf --height ~100% --layout reverse --style minimal --preview-window wrap | Set-Location
 }
 function ff {
   $env:FZF_DEFAULT_COMMAND="fd --hidden --no-ignore --type d && fd --hidden --no-ignore --type f"
@@ -80,4 +79,4 @@ Invoke-Expression (& { (zoxide init powershell | Out-String) })
 Set-PSReadLineOption -PredictionSource History
 Set-PSReadLineOption -PredictionViewStyle ListView
 
-clear
+Clear-Host

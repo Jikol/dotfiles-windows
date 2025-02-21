@@ -41,9 +41,11 @@
             }
           }
         },
-        "required": ["path", "attributes"]
+        "required": ["path", "attributes"],
+        "additionalProperties": false
       }
     }
   },
-  "required": ["$schema", "data"]
+  "required": ["$schema", "data"],
+  "additionalProperties": false
 }

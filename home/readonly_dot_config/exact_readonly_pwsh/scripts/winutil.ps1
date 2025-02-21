@@ -48,13 +48,13 @@ $principal = New-Object System.Security.Principal.WindowsPrincipal([System.Secur
 if (-not $principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)) {
   Write-Host "Attempt to start elevated process" -ForegroundColor Yellow
   try {
-    $proc = Start-Process pwsh.exe -ArgumentList "-NoProfile -File `"$PSCommandPath`"" -Verb RunAs -PassThru
-    if ($proc -eq $null) { throw }
+    $proc = Start-Process pwsh.exe -ArgumentList "-NoExit -NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs -PassThru
+    if ($null -eq $proc) { throw "Could not start the elevated process" }
+    $proc.WaitForExit()
     
     exit
   } catch {
-    Write-Host "Failed to start script with elevated access" -ForegroundColor Red
-    cmd /c pause
+    Write-Host "$_" -ForegroundColor Red
     
     exit 1
   }
