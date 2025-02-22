@@ -1,6 +1,6 @@
 ### Script for installing & initializing tools for development in Windows 11 21H2 ###
 
-## Global parameters ##
+## Global parameters ## 
 param (
   [ValidateSet("personal", "work")]
   [string]$scope,
@@ -8,22 +8,23 @@ param (
 )
 
 ## Helper functions ##
-function Get-Env{[OutputType([string])]param([string]$name,[System.EnvironmentVariableTarget]$scope=[System.EnvironmentVariableTarget]::User)return [Environment]::GetEnvironmentVariable($name,$scope)} # noqa: *
-function Set-Env{param([string]$name,[string]$value,[switch]$delete,[System.EnvironmentVariableTarget]$scope=[System.EnvironmentVariableTarget]::User)if($delete){[Environment]::SetEnvironmentVariable($name,$null,$scope)}[Environment]::SetEnvironmentVariable($name,$value,$scope)}
-function Sync-Env{$userName=$env:USERNAME;$architecture=$env:PROCESSOR_ARCHITECTURE;$psModulePath=$env:PSModulePath;$scopeList="Process","Machine";if("SYSTEM","${env:COMPUTERNAME}`$"-notcontains $userName){$scopeList+="User"}foreach($scope in $scopeList){$envList=[string]::Empty;switch($scope){"User"{$envList=Get-Item "HKCU:\Environment" -ErrorAction SilentlyContinue|Select-Object -ExpandProperty Property}"Machine"{$envList=Get-Item "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Environment"|Select-Object -ExpandProperty Property}"Process"{$envList=Get-ChildItem Env:\|Select-Object -ExpandProperty Key}};$envList|ForEach-Object{Set-Item "Env:$_"-Value(Get-Env -scope $scope -name $_)}};$paths="Machine","User"|ForEach-Object{(Get-Env -name "Path" -scope $_)-split ';'}|Select-Object -Unique;$env:Path=$paths-join ';';$env:PSModulePath=$psModulePath;if($userName){$env:USERNAME=$userName};if($architecture){$env:PROCESSOR_ARCHITECTURE=$architecture}}
-function Add-Path{param([string]$path)$currentPath=Get-Env -Name "PATH";if($currentPath -notlike "*$path*"){Set-Env -Name "PATH" -Value "$currentPath;$path"}}
-function New-Shortcut{param([string]$path,[string]$target,[string]$dir)$shell=New-Object -ComObject WScript.Shell;$shortcut=$shell.CreateShortcut($path);$shortcut.TargetPath=$target;$shortcut.WorkingDirectory=$dir;$shortcut.IconLocation=$target;$shortcut.Save()}
-function Stop-Execution{param([string]$message)Write-Host $message -ForegroundColor Red;Stop-Transcript;pause;Set-Env -Name "EXIT_MESSAGE" -Value $message;Stop-Process -Id $PID -Force}
+function Get-Env { [OutputType([string])]param([string]$name, [System.EnvironmentVariableTarget]$scope = [System.EnvironmentVariableTarget]::User)return [Environment]::GetEnvironmentVariable($name, $scope) } # noqa: *
+function Set-Env { param([string]$name, [string]$value, [switch]$delete, [System.EnvironmentVariableTarget]$scope = [System.EnvironmentVariableTarget]::User)if ($delete) { [Environment]::SetEnvironmentVariable($name, $null, $scope) }[Environment]::SetEnvironmentVariable($name, $value, $scope) }
+function Sync-Env { $userName = $env:USERNAME; $architecture = $env:PROCESSOR_ARCHITECTURE; $psModulePath = $env:PSModulePath; $scopeList = "Process", "Machine"; if ("SYSTEM", "${env:COMPUTERNAME}`$" -notcontains $userName) { $scopeList += "User" }foreach ($scope in $scopeList) { $envList = [string]::Empty; switch ($scope) { "User" { $envList = Get-Item "HKCU:\Environment" -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Property }"Machine" { $envList = Get-Item "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" | Select-Object -ExpandProperty Property }"Process" { $envList = Get-ChildItem Env:\ | Select-Object -ExpandProperty Key } }; $envList | ForEach-Object { Set-Item "Env:$_"-Value(Get-Env -scope $scope -name $_) } }; $paths = "Machine", "User" | ForEach-Object { (Get-Env -name "Path" -scope $_) -split ';' } | Select-Object -Unique; $env:Path = $paths -join ';'; $env:PSModulePath = $psModulePath; if ($userName) { $env:USERNAME = $userName }; if ($architecture) { $env:PROCESSOR_ARCHITECTURE = $architecture } }
+function Add-Path { param([string]$path)$currentPath = Get-Env -Name "PATH"; if ($currentPath -notlike "*$path*") { Set-Env -Name "PATH" -Value "$currentPath;$path" } }
+function New-Shortcut { param([string]$path, [string]$target, [string]$dir)$shell = New-Object -ComObject WScript.Shell; $shortcut = $shell.CreateShortcut($path); $shortcut.TargetPath = $target; $shortcut.WorkingDirectory = $dir; $shortcut.IconLocation = $target; $shortcut.Save() }
+function Stop-Execution { param([string]$message)Write-Host $message -ForegroundColor Red; Stop-Transcript; pause; Set-Env -Name "EXIT_MESSAGE" -Value $message; Stop-Process -Id $PID -Force }
 
 ## Leverage access control (ensuring that the script is always run as administrator, otherwise it will not run) ##
 $principal = New-Object System.Security.Principal.WindowsPrincipal([System.Security.Principal.WindowsIdentity]::GetCurrent())
 if (! $principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)) {
-   Write-Host "Attempt to start elevated process" -ForegroundColor Yellow
+  Write-Host "Attempt to start elevated process" -ForegroundColor Yellow
   try {
     $scriptPath = $null
     if ($MyInvocation.MyCommand.Path) {
       $scriptPath = $MyInvocation.MyCommand.Path
-    } else {
+    }
+    else {
       $scriptContent = Invoke-RestMethod -Uri "https://raw.githubusercontent.com/Jikol/dotconfig-windows/refs/heads/master/install.ps1"
       Set-Content -Path "$env:TEMP/install.ps1" -Value $scriptContent
       $scriptPath = "$env:TEMP/install.ps1"
@@ -35,7 +36,8 @@ if (! $principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Admini
     Write-Host "Installation script run succesfully" -ForegroundColor Green
 
     if ($MyInvocation.MyCommand.Path) { exit } else { return }
-  } catch {
+  }
+  catch {
     Write-Host "$_" -ForegroundColor Red
     Set-Env -Name "EXIT_MESSAGE" -Delete
 
@@ -96,7 +98,8 @@ $restorePointName = "pre_install_$currentDateTime"
 try {
   Checkpoint-Computer -Description $restorePointName -RestorePointType "MODIFY_SETTINGS" -ErrorAction Stop
   Write-Host "System restore point created successfully" -ForegroundColor Green
-} catch {
+}
+catch {
   $errorMessage = "Failed to create system restore point"
   Stop-Execution -Message $errorMessage
 }
@@ -109,7 +112,8 @@ try {
   Write-Host "Creating a registry backup at $backupPath/RegistryBackup_$dateTime.reg" -ForegroundColor Cyan
   reg export HKLM $backupFile /y
   Write-Host "Registry backup created at $backupFile" -ForegroundColor Green
-} catch {
+}
+catch {
   $errorMessage = "Failed to create registry backup (Error: $_)"
   Stop-Execution -Message $errorMessage
 }
@@ -122,7 +126,8 @@ $destinationPath = "$env:TEMP/wsl.2.4.11.0.x64.msi"
 try {
   Get-Command wsl -ErrorAction Stop | Out-Null
   Write-Host "WSL is already installed" -ForegroundColor Green
-} catch {
+}
+catch {
   try {
     Write-Host "Installing windows subsystem for linux (WSL)" -ForegroundColor Cyan
     Invoke-WebRequest -Uri $url -OutFile $destinationPath -ErrorAction Stop
@@ -130,7 +135,8 @@ try {
     Sync-Env
     Get-Command wsl -ErrorAction Stop | Out-Null
     Write-Host "WSL has been successfully installed" -ForegroundColor Green
-  } catch {
+  }
+  catch {
     $errorMessage = "Failed to download and install WSL (Error: $_)"
     Stop-Execution -Message $errorMessage
   }
@@ -147,7 +153,8 @@ $destinationPath = "$env:TEMP/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbu
 try {
   Get-Command winget -ErrorAction Stop | Out-Null
   Write-Host "WinGet is already installed" -ForegroundColor Green
-} catch {
+}
+catch {
   try {
     Write-Host "Installing windows package manager (Winget)" -ForegroundColor Cyan
     Invoke-WebRequest -Uri $url -OutFile $destinationPath -ErrorAction Stop
@@ -155,7 +162,8 @@ try {
     Sync-Env
     Get-Command winget -ErrorAction Stop | Out-Null
     Write-Host "Winget has been successfully installed" -ForegroundColor Green
-  } catch {
+  }
+  catch {
     $errorMessage = "Failed to download and install Winget (Error: $_)"
     Stop-Execution -Message $errorMessage
   }
@@ -169,14 +177,16 @@ $url = "https://community.chocolatey.org/install.ps1"
 try {
   Get-Command choco -ErrorAction Stop | Out-Null
   Write-Host "Chocolatey is already installed" -ForegroundColor Green
-} catch {
+}
+catch {
   try {
     Write-Host "Installing Chocolatey package manager" -ForegroundColor Cyan
     Invoke-RestMethod -Uri $url | Invoke-Expression -ErrorAction Stop
     Sync-Env
     Get-Command choco -ErrorAction Stop | Out-Null
     Write-Host "Chocolatey has been successfully installed" -ForegroundColor Green
-  } catch {
+  }
+  catch {
     $errorMessage = "Failed to download and install Chocolatey (Error: $_)"
     Stop-Execution -Message $errorMessage
   }
@@ -191,14 +201,16 @@ $url = "https://get.scoop.sh"
 try {
   Get-Command scoop -ErrorAction Stop | Out-Null
   Write-Host "Scoop is already installed" -ForegroundColor Green
-} catch {
+}
+catch {
   try {
     Write-Host "Installing Scoop package manager" -ForegroundColor Cyan
     Invoke-RestMethod -Uri $url | Invoke-Expression -ErrorAction Stop
     Sync-Env
     Get-Command scoop -ErrorAction Stop | Out-Null
     Write-Host "Scoop has been successfully installed" -ForegroundColor Green
-  } catch {
+  }
+  catch {
     $errorMessage = "Failed to download and install Scoop (Error: $_)"
     Stop-Execution -Message $errorMessage
   }
@@ -218,7 +230,8 @@ try {
   Get-Command chezmoi -ErrorAction Stop | Out-Null
   chezmoi init --force jikol/dotfiles-windows
   chezmoi apply --force
-} catch {
+}
+catch {
   Write-Host "Failed to install & setup chezmoi (Error: $_)" -ForegroundColor Red
 }
 
@@ -227,7 +240,8 @@ foreach ($dir in $startmenuShortcuts) {
   try {
     Get-ChildItem -Path $dir -Recurse -Force | Remove-Item -Recurse -Force -ErrorAction Stop
     Write-Host "All start menu shortcuts in $dir have been deleted" -ForegroundColor Yellow
-  } catch {
+  }
+  catch {
     $errorMessage = "Failed to delete files in $dir (Error: $_)"
     Stop-Execution -Message $errorMessage
   }
@@ -244,7 +258,8 @@ try {
     }
   }
   Write-Host "All startup program entries in $autoStartupRegistry have been deleted" -ForegroundColor Yellow
-} catch {
+}
+catch {
   $errorMessage = "Failed to clear startup programs in $autoStartupRegistry (Error: $_)"
   Stop-Execution -Message $errorMessage
 }
@@ -278,7 +293,8 @@ foreach ($package in $packages.data) {
       ) -Dir $startmenuShortcuts[0]
       Write-Host "Added start menu shortcut $($package.startShortcut) to $($startmenuShortcuts[0])" -ForegroundColor Green
     }
-  } catch {
+  }
+  catch {
     Write-Host "Failed to install & setup $($package.name) chocolatey package (Error: $_)" -ForegroundColor Red
   }
 }

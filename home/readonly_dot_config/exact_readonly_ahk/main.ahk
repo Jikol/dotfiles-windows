@@ -22,32 +22,12 @@ MinimizeWindowsTerminal(title) {
 	}
 }
 
-^!l::
-{
-	SpawnWindowsTerminal("Tmux", "wt --fullscreen -p Tmux")
-	return
-}
+^!l::SpawnWindowsTerminal("Tmux", "wt --fullscreen -p Tmux")
+^!z::SpawnWindowsTerminal("Btop", "wt --fullscreen btop")
+#b::Run("chrome")
+#f::Run("explorer")
+#q::WinClose("A")
 
-^!z::
-{
-	SpawnWindowsTerminal("Btop", "wt --fullscreen btop")
-	return
-}
-
-#b::
-{
-	Run("chrome")
-	return
-}
-
-#f::
-{
-	Run("explorer")
-	return
-}
-
-#q::
-{
-	WinClose("A")
-	return
-}
+#HotIf WinActive("ahk_exe sublime_text.exe")
+!w::Send "^s"
+#HotIf

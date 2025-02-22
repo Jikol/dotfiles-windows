@@ -15,7 +15,10 @@
             "type": "string"
           },
           "shell": {
-            "type": ["object", "null"],
+            "type": [
+              "object",
+              "null"
+            ],
             "properties": {
               "cmd": {
                 "type": "string"
@@ -24,14 +27,23 @@
                 "type": "string"
               }
             },
-            "required": ["cmd", "path"],
+            "required": [
+              "cmd",
+              "path"
+            ],
             "additionalProperties": false
           },
           "execPath": {
-            "type": ["string", "null"]
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "envAdd": {
-            "type": ["array", "null"],
+            "type": [
+              "array",
+              "null"
+            ],
             "items": {
               "type": "object",
               "properties": {
@@ -42,15 +54,24 @@
                   "type": "string"
                 }
               },
-              "required": ["name", "value"],
+              "required": [
+                "name",
+                "value"
+              ],
               "additionalProperties": false
             }
           },
           "autoStartup": {
-            "type": ["boolean", "string"]
+            "type": [
+              "boolean",
+              "string"
+            ]
           },
           "startShortcut": {
-            "type": ["boolean", "string"]
+            "type": [
+              "boolean",
+              "string"
+            ]
           }
         },
         "required": [
@@ -65,6 +86,9 @@
       }
     }
   },
-  "required": ["$schema", "data"],
+  "required": [
+    "$schema",
+    "data"
+  ],
   "additionalProperties": false
 }

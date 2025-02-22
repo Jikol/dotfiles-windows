@@ -1,0 +1,19 @@
+{
+	"bootstrapped": true,
+	"in_process_packages":
+	[
+	],
+	"installed_packages":
+	[
+		"A File Icon",
+		"ayu",
+		"Catppuccin color schemes",
+		"JsPrettier",
+		"LSP",
+		"LSP-json",
+		"LSP-PowerShellEditorServices",
+		"Materialize",
+		"Package Control",
+		"PowerShell",
+	],
+}
