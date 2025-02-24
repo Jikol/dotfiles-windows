@@ -204,6 +204,8 @@ catch {
 }
 Write-Host "Attempt to update" -ForegroundColor Yellow
 choco upgrade chocolatey
+choco feature enable --name=allowGlobalConfirmation
+choco feature enable --name=removePackageInformationOnUninstall
 Write-Host "Current version" -ForegroundColor Cyan
 choco --version
 

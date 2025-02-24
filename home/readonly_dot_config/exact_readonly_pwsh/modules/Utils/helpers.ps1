@@ -63,7 +63,7 @@ function Open-ChezmoiManaged {
 }
 
 function Invoke-Tmux {
-  wsl exec tmux new-nession -A -s main
+  wsl exec tmux new-session -A -s main
 }
 
 function Open-Winutil {
