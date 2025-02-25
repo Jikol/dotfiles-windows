@@ -39,9 +39,9 @@ Set-Symlink -Target "$HOME/scoop/apps/btop/current/btop.conf" -Source "$HOME/.co
 Set-Symlink -Target "$HOME/scoop/apps/btop/current/themes" -Source "$HOME/.config/btop/themes"
 
 # Sublime-Text #
-$userSettings = Get-ChildItem -Path "$HOME/.config/subl"
-foreach ($file in $userSettings) {
-  Set-Symlink -Target (Join-Path -Path "$HOME/scoop/persist/sublime-text/Data/Packages/User" -ChildPath $file.Name) -Source (Join-Path -Path "$HOME/.config/subl" -ChildPath $file.Name)
-}
+#$userSettings = Get-ChildItem -Path "$HOME/.config/subl"
+#foreach ($file in $userSettings) {
+#  Set-Symlink -Target (Join-Path -Path "$HOME/scoop/persist/sublime-text/Data/Packages/User" -ChildPath $file.Name) -Source (Join-Path -Path "$HOME/.config/subl" -ChildPath $file.Name)
+#}
 
 Write-Output "Symlinks created"
