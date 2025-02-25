@@ -4,7 +4,6 @@ function Set-Symlink {
     [string]$source
   )
   try {
-    #$target = Resolve-Path -Path $target -ErrorAction SilentlyContinue
     Remove-Item -Path $target -Force -Recurse -ErrorAction SilentlyContinue
     New-Item -ItemType SymbolicLink -Path $target -Target $source -ErrorAction Stop | Out-Null
   }
