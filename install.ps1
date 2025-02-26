@@ -236,18 +236,6 @@ scoop status
 
 ## Packages installation ##
 
-# Chezmoi #
-try {
-  scoop install chezmoi
-  scoop update chezmoi
-  Get-Command chezmoi -ErrorAction Stop | Out-Null
-  chezmoi init --force jikol/dotfiles-windows
-  chezmoi apply --force
-}
-catch {
-  Write-Host "Failed to install & setup chezmoi (Error: $_)" -ForegroundColor Red
-}
-
 # Delete default start menu shortcuts #
 foreach ($dir in $startmenuShortcuts) {
   try {
@@ -310,6 +298,18 @@ foreach ($package in $packages.data) {
   catch {
     Write-Host "Failed to install & setup $($package.name) chocolatey package (Error: $_)" -ForegroundColor Red
   }
+}
+
+# Chezmoi #
+try {
+  scoop install chezmoi
+  scoop update chezmoi
+  Get-Command chezmoi -ErrorAction Stop | Out-Null
+  chezmoi init --force jikol/dotfiles-windows
+  chezmoi apply --force
+}
+catch {
+  Write-Host "Failed to install & setup chezmoi (Error: $_)" -ForegroundColor Red
 }
 
 # Stop logging #

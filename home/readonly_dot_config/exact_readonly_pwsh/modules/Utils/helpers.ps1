@@ -1,18 +1,3 @@
-function Set-Symlink {
-  param(
-    [string]$target,
-    [string]$source
-  )
-  try {
-    Remove-Item -Path $target -Force -Recurse -ErrorAction SilentlyContinue
-    New-Item -ItemType SymbolicLink -Path $target -Target $source -ErrorAction Stop | Out-Null
-  }
-  catch {
-    Write-Error "Script execution failed: $_"
-    exit 1
-  }
-}
-
 function Invoke-ChezmoiSync {
   param(
     [switch]$force 

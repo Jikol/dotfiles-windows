@@ -13,7 +13,6 @@ Set-Alias g git
 Set-Alias gg lazygit
 Set-Alias d docker
 Set-Alias dd lazydocker
-Set-Alias sudo gsudo
 Set-Alias vim nvim
 Set-Alias edit subl
 Set-Alias ip ipconfig
@@ -24,6 +23,7 @@ Set-Alias ch chezmoi
 Set-Variable "PROFILE" "$HOME\.config\pwsh\profile.ps1"
 Set-Variable "CONFIG_POWERSHELL" "$HOME\.config\pwsh\profile.ps1"
 Set-Variable "CONFIG_VIM" "$HOME\.config\nvim\init.vim"
+Set-Variable "PWSH_UTILS" "$HOME\.config\pwsh\modules\Utils\Utils.psm1"
 
 ## Themes ##
 $catppuccinMocha = $Catppuccin["Mocha"]
@@ -42,7 +42,7 @@ Set-PSReadLineOption -Colors @{
 	InlinePrediction = $catppuccinMocha.Overlay0.Foreground()
 	ListPrediction = $catppuccinMocha.Rosewater.Foreground()
 	ListPredictionSelected = $catppuccinMocha.Surface0.Background()
-	Command = $catppuccinMocha.Lavender.Foreground()
+	Command = $catppuccinMocha.Blue.Foreground()
 	Comment = $catppuccinMocha.Green.Foreground()
 	Default = $catppuccinMocha.Sky.Foreground()
 	Error = $catppuccinMocha.Red.Foreground()

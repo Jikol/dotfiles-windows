@@ -3,101 +3,59 @@
   "data": [
     {
       "path": "~/utils",
-      "attributes": [
-        "exact",
-        "readonly"
-      ]
+      "attributes": ["exact", "readonly"]
     },
     {
       "path": "~/.ssh",
-      "attributes": [
-        "exact",
-        "readonly"
-      ]
+      "attributes": ["exact", "readonly"]
     },
     {
       "path": "~/.config/ahk",
-      "attributes": [
-        "exact",
-        "readonly"
-      ]
+      "attributes": ["exact", "readonly"]
     },
     {
       "path": "~/.config/bat",
-      "attributes": [
-        "exact",
-        "readonly"
-      ]
+      "attributes": ["exact", "readonly"]
     },
     {
       "path": "~/.config/btop",
-      "attributes": [
-        "exact",
-        "readonly"
-      ]
+      "attributes": ["exact", "readonly"]
     },
     {
       "path": "~/.config/delta",
-      "attributes": [
-        "exact",
-        "readonly"
-      ]
+      "attributes": ["exact", "readonly"]
     },
     {
       "path": "~/.config/git",
-      "attributes": [
-        "exact",
-        "readonly"
-      ]
+      "attributes": ["exact", "readonly"]
     },
     {
       "path": "~/.config/nvim",
-      "attributes": [
-        "exact",
-        "readonly"
-      ]
+      "attributes": ["exact", "readonly"]
     },
     {
       "path": "~/.config/omp",
-      "attributes": [
-        "exact",
-        "readonly"
-      ]
+      "attributes": ["exact", "readonly"]
     },
     {
       "path": "~/.config/pwsh",
-      "attributes": [
-        "exact",
-        "readonly"
-      ]
+      "attributes": ["exact", "readonly"]
     },
     {
       "path": "~/.config/lazygit",
-      "attributes": [
-        "exact",
-        "readonly"
-      ]
+      "attributes": ["exact", "readonly"]
     },
     {
       "path": "~/.config/lazydocker",
-      "attributes": [
-        "exact",
-        "readonly"
-      ]
+      "attributes": ["exact", "readonly"]
     },
     {
       "path": "~/.config/wt",
-      "attributes": [
-        "exact",
-        "readonly"
-      ]
+      "attributes": ["exact", "readonly"]
     },
     {
       "path": "~/.config/subl",
-      "attributes": [
-        "exact",
-        "readonly"
-      ]
+      "attributes": ["exact", "readonly"]
     }
   ]
 }

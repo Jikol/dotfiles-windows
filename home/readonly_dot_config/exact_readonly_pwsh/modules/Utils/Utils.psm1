@@ -2,7 +2,6 @@
 . "$PSScriptRoot\Helpers.ps1"
 . "$PSScriptRoot\Listings.ps1"
 . "$PSScriptRoot\Environment.ps1"
-. "$PSScriptRoot\Elevated.ps1"
 . "$PSScriptRoot\Fzf.ps1"
 
 ## Aliases ##
