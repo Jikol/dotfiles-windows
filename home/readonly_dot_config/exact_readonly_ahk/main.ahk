@@ -22,7 +22,7 @@ MinimizeWindowsTerminal(title) {
 	}
 }
 
-^!l::SpawnWindowsTerminal("Tmux", "wt --fullscreen -p Tmux")
+^!e::SpawnWindowsTerminal("Tmux", "wt --fullscreen -p Tmux")
 ^!z::SpawnWindowsTerminal("Btop", "wt --fullscreen btop")
 #b::Run("chrome")
 #f::Run("explorer")
