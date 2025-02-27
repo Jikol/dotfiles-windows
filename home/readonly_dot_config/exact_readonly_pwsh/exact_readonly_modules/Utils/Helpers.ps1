@@ -1,9 +1,9 @@
 function Invoke-ChezmoiSync {
   param(
-    [switch]$force 
+    [switch]$f 
   )
   $diff = chezmoi diff
-  if ( [string]::IsNullOrWhiteSpace($diff) -and !$force) {
+  if ( [string]::IsNullOrWhiteSpace($diff) -and !$f) {
     Write-Host "No need to perform sync operation" -ForegroundColor Green
     return
   }
@@ -20,9 +20,13 @@ function Invoke-ChezmoiSync {
   $managed = Get-Content -Path "$env:CHEZMOI_LOCAL_PATH\managed.json" | ConvertFrom-Json
   foreach ($data in $managed.data) {
     $sourcePath = Resolve-Path $data.path
+    $subdirPaths = Get-ChildItem -Path $sourcePath -Directory
     chezmoi add --secrets ignore $sourcePath
     foreach ($attr in $data.attributes) {
       chezmoi chattr +"$( $attr )" $sourcePath
+      foreach ($subdirPath in $subdirPaths) {
+        chezmoi chattr +"$( $attr )" (Join-Path -Path $sourcePath -ChildPath $subdirPath.Name)
+      }
     }
     Write-Host "$sourcePath added to managed files" -ForegroundColor Cyan
   }
