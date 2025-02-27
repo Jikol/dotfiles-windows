@@ -48,3 +48,5 @@
 [includeIf "gitdir:**/windows-dev/**/.git"]
   path = github.gitconfig
 # ------------------------- #
+[credential "helperselector"]
+	selected = wincred
