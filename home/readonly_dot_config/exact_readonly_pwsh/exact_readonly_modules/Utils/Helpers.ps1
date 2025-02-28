@@ -17,7 +17,7 @@ function Invoke-ChezmoiSync {
     Write-Host "$sourcePath removed from managed files" -ForegroundColor Yellow
   }
 
-  $managed = Get-Content -Path "$env:CHEZMOI_LOCAL_PATH\managed.json" | ConvertFrom-Json
+  $managed = Get-Content -Path "$env:CHEZMOI_DATA_HOME\managed.json" | ConvertFrom-Json
   foreach ($data in $managed.data) {
     $sourcePath = Resolve-Path $data.path
     $subdirPaths = Get-ChildItem -Path $sourcePath -Directory
@@ -43,11 +43,11 @@ function Invoke-ChezmoiSync {
 }
 
 function Move-LocationChezmoi {
-  Set-Location "$env:CHEZMOI_LOCAL_PATH"
+  Set-Location "$env:CHEZMOI_DATA_HOME"
 }
 
 function Open-ChezmoiManaged {
-  vim "$env:CHEZMOI_LOCAL_PATH\managed.json"
+  vim "$env:CHEZMOI_DATA_HOME\managed.json"
 }
 
 function Invoke-Tmux {

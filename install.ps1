@@ -55,7 +55,6 @@ if (! $principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Admini
   }
 }
 
-<#
 ## Setup initialization ##
 
 # Global variables #
@@ -264,7 +263,7 @@ catch {
   $errorMessage = "Failed to clear startup programs in $autoStartupRegistry (Error: $_)"
   Stop-Execution -Message $errorMessage
 }
-
+ 
 # Chocolatey #
 $packages = Get-Content -Path "$env:CHEZMOI_LOCAL_PATH/packages/chocolatey.json" | ConvertFrom-Json
 foreach ($package in $packages.data) {
@@ -315,4 +314,33 @@ catch {
 # Stop logging #
 Stop-Transcript
 
-#>
+$packages = @(
+  @{
+    name    = "vlc";
+    version = "3.0.21";
+    cmd     = "vlc";
+    path    = "%PROGRAMFILES%\VideoLAN\VLC"
+  },
+  @{
+    name    = "nodejs-lts";
+    version = "22.13.1";
+    cmd     = "node";
+    path    = "%PROGRAMFILES%\nodejs";
+  },
+  @{
+    name    = "rabbitmq";
+    version = "3.13.6";
+    cmd     = "rabbitmqctl";
+    path    = "%PROGRAMFILES%\RabbitMQ Server\rabbitmq_server-3.13.6\sbin";
+  },
+  @{
+    name    = "chromium";
+    version = "132.0.6834.111";
+    cmd     = "chrome";
+    path    = "%PROGRAMFILES%\Chromium\Application";
+  },
+  @{
+    name    = "vcredist140";
+    version = "14.42.34433"
+  }
+)

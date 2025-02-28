@@ -14,6 +14,7 @@ Set-Alias gg lazygit
 Set-Alias d docker
 Set-Alias dd lazydocker
 Set-Alias vim nvim
+Set-Alias fetch fastfetch
 Set-Alias edit subl
 Set-Alias ip ipconfig
 Set-Alias cat bat
