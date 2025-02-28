@@ -8,6 +8,7 @@ Import-Module -Name Utils -Force
 Sync-Env
 
 ## Aliases ##
+Remove-Alias rm -ErrorAction SilentlyContinue
 Set-Alias csl cls
 Set-Alias g git
 Set-Alias gg lazygit
