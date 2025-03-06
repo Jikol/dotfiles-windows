@@ -73,10 +73,10 @@
         {
           "properties": {
             "cache_duration": "none",
-            "fetch_version": false
+            "fetch_version": true
           },
           "leading_diamond": " \ue0b6",
-          "template": "\ue235 {{ if .Error }}{{ .Error }}{{ else }}{{ if .Venv }}{{ .Venv }} {{ end }}{{ .Full }}{{ end }}",
+          "template": "\ue235 {{ if .Error }}{{ .Error }}{{ else }}{{ if .Venv }}{{ .Venv }}{{ end }} {{ .Full }} {{ end }}",
           "foreground": "#FFE873",
           "background": "#306998",
           "type": "python",
@@ -85,9 +85,9 @@
         {
           "properties": {
             "cache_duration": "none",
-            "fetch_version": false
+            "fetch_version": true
           },
-          "template": " \ue718 node {{ if .PackageManagerIcon }}{{ .PackageManagerIcon }} {{ end }}{{ .Full }}",
+          "template": "\ue718 {{ if .Error }}{{ .Error }}{{ else }}{{ if .PackageManagerIcon }}{{ .PackageManagerIcon }}{{ end }}{{ .Full }} {{ end }}",
           "foreground": "#1f1e2e",
           "powerline_symbol": "\ue0b6",
           "background": "#a6e3a1",

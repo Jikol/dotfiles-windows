@@ -56,6 +56,14 @@
     {
       "path": "~/.config/subl",
       "attributes": ["exact", "readonly"]
+    },
+    {
+      "path": "~/.config/fastfetch",
+      "attributes": ["exact", "readonly"]
+    },
+    {
+      "path": "~/.config/docker",
+      "attributes": ["exact", "readonly"]
     }
   ]
 }

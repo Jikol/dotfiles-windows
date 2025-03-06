@@ -1,18 +1,18 @@
-# Static includes #
 [include]
-	path = ~/.config/delta/catppuccin_mocha.gitconfig
+	path = $HOME/.config/delta/catppuccin_mocha.gitconfig
 
-# Main settings section #
 [alias]
 	up = fetch -p
-	last = log -1 HEAD --stat
+	last = log -1 HEAD --stat --graph
 	r = remote -v
 	b = branch -a
 	c = commit -m
 	s = status -sb
 	d = diff
+	p = pull
+	P = push
 	stat = status
-	ll = log --oneline --decorate --graph
+	ls = log --oneline --decorate --graph
 	sub = submodule update --recursive --remote
 	conf = config --list --show-origin --show-scope
 	aliases = config --get-regex ^alias
@@ -36,17 +36,22 @@
 
 [diff]
   colorMoved = default
-# --------------------- #
 
-# GPG Signing section #
-# ------------------- #
+[http]
+	postBuffer = 524288000
+	maxRequestBuffer = 524288000
 
-# Include SSH creds section #
+[includeIf "gitdir:**/school/**/.git"]
+  path = gitlabvsb.gitconfig
+
+[includeIf "gitdir:**/work/**/.git"]
+  path = work.gitconfig
+
+[includeIf "gitdir:**/personal/**/.git"]
+  path = github.gitconfig
+
 [includeIf "gitdir:**/chezmoi/**/.git"]
   path = github.gitconfig
 
-[includeIf "gitdir:**/windows-dev/**/.git"]
+[includeIf "gitdir:**/.config/**/.git"]
   path = github.gitconfig
-# ------------------------- #
-[credential "helperselector"]
-	selected = wincred

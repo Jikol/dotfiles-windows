@@ -1,6 +1,6 @@
 augroup RestoreCursorShapeOnExit
-    autocmd!
-    autocmd VimLeave * set guicursor=a:ver20,a:blinkwait700-blinkoff400-blinkon250
+  autocmd!
+  autocmd VimLeave * set guicursor=a:ver20,a:blinkwait700-blinkoff400-blinkon250
 augroup END
 
 set tabstop=2

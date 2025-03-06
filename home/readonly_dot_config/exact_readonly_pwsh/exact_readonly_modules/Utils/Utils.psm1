@@ -10,8 +10,8 @@ Set-Alias ll Show-ListingsList
 Set-Alias la Show-ListingsListHidden
 Set-Alias .. Move-LocationParent
 
-Set-Alias path Show-Path
-Set-Alias env Get-Env
+Set-Alias envpath Show-Path
+Set-Alias env Show-Env
 Set-Alias envrld Sync-Env
 
 Set-Alias f Invoke-FzfDir
@@ -24,6 +24,8 @@ Set-Alias chsync Invoke-ChezmoiSync
 
 Set-Alias l Invoke-Tmux
 Set-Alias winutil Open-Winutil
+
+Set-Alias batrld Sync-Bat
 
 ## Export ##
 Export-ModuleMember -Function *

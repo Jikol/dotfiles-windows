@@ -3,13 +3,13 @@ function Move-LocationParent {
 }
   
 function Show-Listings {
-  wsl exec exa --icons
+  wsl exec exa --color always --icons
 }
   
 function Show-ListingsList {
-  wsl exec exa -l --icons
+  wsl exec exa -l --color always --icons
 }
 
 function Show-ListingsListHidden {
-  wsl exec exa -la --icons
+  wsl exec exa -la --color always --icons
 }   
