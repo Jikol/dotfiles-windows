@@ -26,7 +26,7 @@
             "style": "agnoster_short"
           },
           "template": " {{ .Path }} ",
-          "foreground": "#ffe9df",
+          "foreground": "#f5e0dc",
           "powerline_symbol": "\ue0b0",
           "background": "#363a4f",
           "type": "path",
