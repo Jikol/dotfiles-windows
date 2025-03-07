@@ -25,6 +25,7 @@ Set-Alias ch chezmoi
 Set-Variable "PROFILE" "$HOME\.config\pwsh\profile.ps1"
 Set-Variable "CONFIG_POWERSHELL" "$HOME\.config\pwsh\profile.ps1"
 Set-Variable "CONFIG_VIM" "$HOME\.config\nvim\init.vim"
+Set-Variable "CONFIG_GIT" "$HOME\.config\git\config"
 Set-Variable "PWSH_UTILS" "$HOME\.config\pwsh\modules\Utils\Utils.psm1"
 
 ## Themes ##

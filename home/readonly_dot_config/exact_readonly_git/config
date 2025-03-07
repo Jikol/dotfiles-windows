@@ -1,5 +1,5 @@
 [include]
-	path = $HOME/.config/delta/catppuccin_mocha.gitconfig
+	path = ~/.config/delta/catppuccin-mocha.gitconfig
 
 [alias]
 	up = fetch -p

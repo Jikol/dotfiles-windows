@@ -28,5 +28,8 @@ sudo {
   # Sublime-Text #
   Set-Symlink -Target "$env:APPDATA\Sublime Text\Packages\User" -Source "$HOME\.config\subl"
 
+  # Docker #
+  Set-Symlink -Target "$HOME\.docker\config.json" -Source "$HOME\.config\docker\config.json"
+
   Write-Host "Symlinks created" -ForegroundColor Green
 }
