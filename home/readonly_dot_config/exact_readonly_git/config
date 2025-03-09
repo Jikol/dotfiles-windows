@@ -22,7 +22,8 @@
 
 [core]
 	autocrlf = false
-	filemode = false
+  ignorecase = false
+  filemode = false
 	sshCommand = C:/Windows/System32/OpenSSH/ssh.exe
 	pager = delta
 
