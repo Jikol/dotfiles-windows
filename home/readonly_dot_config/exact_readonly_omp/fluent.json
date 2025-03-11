@@ -73,7 +73,9 @@
         {
           "properties": {
             "cache_duration": "none",
-            "fetch_version": true
+            "fetch_version": true,
+            "display_mode": "always",
+            "home_enabled": true
           },
           "leading_diamond": " \ue0b6",
           "template": "\ue235 {{ if .Error }}{{ .Error }}{{ else }}{{ if .Venv }}{{ .Venv }}{{ end }} {{ .Full }} {{ end }}",
@@ -85,7 +87,9 @@
         {
           "properties": {
             "cache_duration": "none",
-            "fetch_version": true
+            "fetch_version": true,
+            "display_mode": "always",
+            "home_enabled": true
           },
           "template": "\ue718 {{ if .Error }}{{ .Error }}{{ else }}{{ if .PackageManagerIcon }}{{ .PackageManagerIcon }}{{ end }}{{ .Full }} {{ end }}",
           "foreground": "#1f1e2e",
