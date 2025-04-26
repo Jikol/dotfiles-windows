@@ -4,7 +4,7 @@ Host vsbsrv
 
 Host retina-staging
   HostName retina-staging.jikol.dev
-  User admin
+  User jikol
 
 Host retina-production
   HostName retina-production.jikol.dev
