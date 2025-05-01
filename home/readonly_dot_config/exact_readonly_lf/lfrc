@@ -1,0 +1,16 @@
+# defaults
+set shell powershell
+set cursorpreviewfmt "\033[7;2m"
+
+# commands
+cmd q quit
+cmd open &subl $env:f
+cmd edit $nvim $env:f
+
+# commands keybinds
+map e edit
+map a :push %mkdir<space>
+map <right> open
+map <enter> open
+map <delete> :delete
+map <esc> q

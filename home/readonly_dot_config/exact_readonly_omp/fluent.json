@@ -60,9 +60,7 @@
           "background": "#f5c2e7",
           "type": "exit",
           "style": "diamond",
-          "background_templates": [
-            "{{ if gt .Code 0 }}#f38ba8{{ end }}"
-          ]
+          "background_templates": ["{{ if gt .Code 0 }}#f38ba8{{ end }}"]
         }
       ]
     },
@@ -78,7 +76,7 @@
             "home_enabled": true
           },
           "leading_diamond": " \ue0b6",
-          "template": "\ue235 {{ if .Error }}{{ .Error }}{{ else }}{{ if .Venv }}{{ .Venv }}{{ end }} {{ .Full }} {{ end }}",
+          "template": "\ue235 {{ if .Error }}{{ .Error }}{{ else }}{{ if .Venv }}{{ .Venv }} {{ end }}{{ .Full }} {{ end }}",
           "foreground": "#FFE873",
           "background": "#306998",
           "type": "python",
@@ -138,9 +136,7 @@
           "foreground": "#e0f8ff",
           "type": "exit",
           "style": "plain",
-          "foreground_templates": [
-            "{{ if gt .Code 0 }}#f38ba8{{ end }}"
-          ]
+          "foreground_templates": ["{{ if gt .Code 0 }}#f38ba8{{ end }}"]
         }
       ],
       "newline": true

@@ -10,7 +10,7 @@
       "attributes": ["exact", "readonly"]
     },
     {
-      "path": "~/.config/ahk",
+      "path": "~/.local/share/ahk",
       "attributes": ["exact", "readonly"]
     },
     {
@@ -63,6 +63,10 @@
     },
     {
       "path": "~/.config/docker",
+      "attributes": ["exact", "readonly"]
+    },
+    {
+      "path": "~/.config/lf",
       "attributes": ["exact", "readonly"]
     }
   ]
