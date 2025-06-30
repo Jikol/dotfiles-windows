@@ -2,10 +2,10 @@ Host vsbsrv
   HostName vsrvfeia0h-86.vsb.cz
   User jav0032
 
-Host retina-staging
-  HostName retina-staging.jikol.dev
+Host vps-staging
+  HostName vps-staging.jikol.dev
   User jikol
 
-Host retina-production
-  HostName retina-production.jikol.dev
+Host vps-production
+  HostName vps-production.jikol.dev
   User admin

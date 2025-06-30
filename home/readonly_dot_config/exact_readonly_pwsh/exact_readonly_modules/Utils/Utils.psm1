@@ -11,8 +11,8 @@ Set-Alias la Show-ListingsListHidden
 Set-Alias .. Move-LocationParent
 
 Set-Alias envpath Show-Path
-Set-Alias env Show-Env
 Set-Alias envrld Sync-Env
+Set-Alias printenv Show-Env
 
 Set-Alias f Invoke-FzfDir
 Set-Alias ff Invoke-FzfFile
