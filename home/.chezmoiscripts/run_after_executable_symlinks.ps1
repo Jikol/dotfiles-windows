@@ -22,8 +22,8 @@ sudo {
   Set-Symlink -Target "$HOME\Documents\PowerShell\profile.ps1" -Source "$HOME\.config\pwsh\profile.ps1"
 
   # Btop #
-  Set-Symlink -Target "$HOME\scoop\apps\btop\current\btop.conf" -Source "$HOME\.config\btop\btop.conf"
-  Set-Symlink -Target "$HOME\scoop\apps\btop\current\themes" -Source "$HOME\.config\btop\themes"
+  Set-Symlink -Target "$env:APPDATA\btop\btop.conf" -Source "$HOME\.config\btop\btop.conf"
+  Set-Symlink -Target "$env:APPDATA\btop\themes" -Source "$HOME\.config\btop\themes"
 
   # Sublime-Text #
   Set-Symlink -Target "$env:APPDATA\Sublime Text\Packages\User" -Source "$HOME\.config\subl"

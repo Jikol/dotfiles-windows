@@ -1,7 +1,7 @@
 {
 	"theme": "ayu-dark.sublime-theme",
 	"color_scheme": "Catppuccin Mocha.sublime-color-scheme",
-	"index_files": true,
+	"index_files": false,
 	"font_face": "JetBrains Mono",
 	"font_size": 10,
 	"tab_size": 2,
@@ -10,6 +10,7 @@
 	"hot_exit": "disabled",
 	"open_files_in_new_window": "always",
 	"ignored_packages": [
+		"Package Control",
 		"Vintage",
 	],
 }
