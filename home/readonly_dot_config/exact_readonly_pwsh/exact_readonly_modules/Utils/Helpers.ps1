@@ -61,3 +61,11 @@ function Open-Winutil {
 function Sync-Bat {
   bat cache --build
 }
+
+function Invoke-Pipe {
+  Get-ChildItem \\.\pipe\
+}
+
+function Import-Profile {
+  . $CONFIG_POWERSHELL
+}
