@@ -6,7 +6,9 @@ sudo {
       [string]$source
     )
     try {
-      Remove-Item -Path $target -Force -Recurse -ErrorAction Stop
+      if (Test-Path $target) {
+        Remove-Item -Path $target -Force -Recurse -ErrorAction Stop
+      }
       New-Item -ItemType SymbolicLink -Path $target -Target $source -ErrorAction Stop | Out-Null
     }
     catch {
