@@ -56,3 +56,5 @@
 
 [includeIf "gitdir:**/.config/**/.git"]
   path = github.gitconfig
+[credential "helperselector"]
+	selected = <no helper>

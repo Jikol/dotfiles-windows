@@ -14,10 +14,6 @@
       "attributes": ["exact", "readonly"]
     },
     {
-      "path": "~/.config/chezmoi",
-      "attributes": ["exact", "readonly"]
-    },
-    {
       "path": "~/.config/bat",
       "attributes": ["exact", "readonly"]
     },
