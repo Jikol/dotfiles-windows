@@ -55,7 +55,7 @@ function Invoke-Tmux {
 }
 
 function Open-Winutil {
-  Invoke-RestMethod -Path "https://christitus.com/win" | Invoke-Expression
+  Invoke-RestMethod -Uri "https://christitus.com/win" | Invoke-Expression
 }
 
 function Sync-Bat {
