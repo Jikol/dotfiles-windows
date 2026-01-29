@@ -1,7 +1,3 @@
-Host vsbsrv
-  HostName vsrvfeia0h-86.vsb.cz
-  User jav0032
-
 Host vps-staging
   HostName vps-staging.jikol.dev
   User jikol
@@ -9,3 +5,7 @@ Host vps-staging
 Host vps-production
   HostName vps-production.jikol.dev
   User admin
+
+Host vps-lpp
+  HostName 172.26.72.16
+  User ondrej
