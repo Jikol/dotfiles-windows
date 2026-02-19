@@ -10,6 +10,7 @@
 	"hot_exit": "disabled",
 	"open_files_in_new_window": "always",
 	"ignored_packages": [
+		"Package Control",
 		"Vintage",
 	],
 }

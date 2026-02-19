@@ -1,5 +1,5 @@
 ## Symlink program config outside ~/.config directory ##
-sudo {
+gsudo {
   function Set-Symlink {
     param(
       [string]$target,
@@ -10,6 +10,7 @@ sudo {
         Remove-Item -Path $target -Force -Recurse -ErrorAction Stop
       }
       New-Item -ItemType SymbolicLink -Path $target -Target $source -ErrorAction Stop | Out-Null
+      Write-Host "Symlink from $source to $target created" -ForegroundColor Green
     }
     catch {
       Write-Error "Script execution failed: $_"
