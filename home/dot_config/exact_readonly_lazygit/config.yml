@@ -27,3 +27,6 @@ gui:
 os:
   edit: 'nvim {{filename}}'
   open: 'nvim {{filename}}'
+
+git:
+  autoFetch: false
