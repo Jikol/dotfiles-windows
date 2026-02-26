@@ -25,7 +25,8 @@ gsudo {
   Set-Symlink -Target "$HOME\Documents\PowerShell\profile.ps1" -Source "$HOME\.config\pwsh\profile.ps1"
 
   # VSCodium #
-  #Set-Symlink -Target "$env:APPDATA\VSCodium\User\keybindings.json" -Source "$HOME\.config\codium\"
+  Set-Symlink -Target "$env:APPDATA\VSCodium\User\keybindings.json" -Source "$HOME\.config\codium\keybindings.json"
+  Set-Symlink -Target "$env:APPDATA\VSCodium\User\settings.json" -Source "$HOME\.config\codium\settings.json"
 
   # Btop #
   Set-Symlink -Target "$env:APPDATA\btop\btop.conf" -Source "$HOME\.config\btop\btop.conf"
