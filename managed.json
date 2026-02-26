@@ -22,6 +22,10 @@
       "attributes": ["exact", "readonly"]
     },
     {
+      "path": "~/.config/codium",
+      "attributes": ["exact", "readonly"]
+    },
+    {
       "path": "~/.config/delta",
       "attributes": ["exact", "readonly"]
     },
@@ -51,10 +55,6 @@
     },
     {
       "path": "~/.config/wt",
-      "attributes": ["exact", "readonly"]
-    },
-    {
-      "path": "~/.config/subl",
       "attributes": ["exact", "readonly"]
     },
     {

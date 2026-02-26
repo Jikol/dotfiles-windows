@@ -4,13 +4,13 @@ function Invoke-ChezmoiSync {
   )
   $diff = chezmoi diff
   if ( [string]::IsNullOrWhiteSpace($diff) -and !$f) {
-    Write-Host "No need to perform sync operation" -ForegroundColor Green
+    Write-Host 'No need to perform sync operation' -ForegroundColor Green
     return
   }
 
   $sourcePath = $( chezmoi source-path )
   $paths = (chezmoi list --path-style source-absolute) -split "`n" |
-  Where-Object { $_ -notmatch ".chezmoiscripts" -and $_ -ne $sourcePath }
+  Where-Object { $_ -notmatch '.chezmoiscripts' -and $_ -ne $sourcePath }
 
   foreach ($sourcePath in $paths) {
     Remove-Item -Path $sourcePath -Recurse -Force -ErrorAction SilentlyContinue
@@ -37,7 +37,7 @@ function Invoke-ChezmoiSync {
     Write-Host "All chezmoi files synced to source path ($( chezmoi source-path ))" -ForegroundColor Green
   }
   else {
-    Write-Host "Chezmoi synced files are inconsistent!" -ForegroundColor Red
+    Write-Host 'Chezmoi synced files are inconsistent!' -ForegroundColor Red
     Write-Output $diff
   }
 }
@@ -50,12 +50,8 @@ function Open-ChezmoiManaged {
   vim "$env:CHEZMOI_DATA_HOME\managed.json"
 }
 
-function Invoke-Tmux {
-  wsl exec tmux new-session -A -s main
-}
-
 function Open-Winutil {
-  Invoke-RestMethod -Uri "https://christitus.com/win" | Invoke-Expression
+  Invoke-RestMethod -Uri 'https://christitus.com/win' | Invoke-Expression
 }
 
 function Sync-Bat {

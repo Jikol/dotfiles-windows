@@ -17,22 +17,22 @@ gsudo {
       exit 1
     }
   }
-
+  
   # Windows Terminal #
   Set-Symlink -Target "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json" -Source "$HOME\.config\wt\settings.json"
 
   # PowerShell #
   Set-Symlink -Target "$HOME\Documents\PowerShell\profile.ps1" -Source "$HOME\.config\pwsh\profile.ps1"
 
+  # VSCodium #
+  #Set-Symlink -Target "$env:APPDATA\VSCodium\User\keybindings.json" -Source "$HOME\.config\codium\"
+
   # Btop #
   Set-Symlink -Target "$env:APPDATA\btop\btop.conf" -Source "$HOME\.config\btop\btop.conf"
   Set-Symlink -Target "$env:APPDATA\btop\themes" -Source "$HOME\.config\btop\themes"
 
-  # Sublime-Text #
-  Set-Symlink -Target "$env:APPDATA\Sublime Text\Packages\User" -Source "$HOME\.config\subl"
-
   # Docker #
   Set-Symlink -Target "$HOME\.docker\config.json" -Source "$HOME\.config\docker\config.json"
 
-  Write-Host "Symlinks created" -ForegroundColor Green
+  Write-Host 'Symlinks created' -ForegroundColor Green
 }

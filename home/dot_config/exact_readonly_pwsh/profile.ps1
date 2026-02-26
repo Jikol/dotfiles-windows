@@ -1,4 +1,4 @@
-Write-Host "Reloading User Profile..." -ForegroundColor Cyan
+Write-Host 'Reloading User Profile...' -ForegroundColor Cyan
  
 ## Modules ##
 Import-Module -Name PSReadLine -Force
@@ -16,21 +16,18 @@ Set-Alias d docker
 Set-Alias dd lazydocker
 Set-Alias vim nvim
 Set-Alias fetch fastfetch
-Set-Alias edit subl
 Set-Alias ip ipconfig
-Set-Alias cat bat
 Set-Alias ch chezmoi
 
 ## Variables ##
-Set-Variable "PROFILE" "$HOME\.config\pwsh\profile.ps1"
-Set-Variable "CONFIG_POWERSHELL" "$HOME\.config\pwsh\profile.ps1"
-Set-Variable "CONFIG_VIM" "$HOME\.config\nvim\init.vim"
-Set-Variable "CONFIG_GIT" "$HOME\.config\git\config"
-Set-Variable "PWSH_UTILS" "$HOME\.config\pwsh\modules\Utils\Utils.psm1"
-Set-Variable "CONFIG_HOSTS" "$env:SYSTEMROOT\System32\drivers\etc\hosts"
+Set-Variable 'PROFILE' "$HOME\.config\pwsh\profile.ps1"
+Set-Variable 'CONFIG_PWSH' "$HOME\.config\pwsh\profile.ps1"
+Set-Variable 'CONFIG_VIM' "$HOME\.config\nvim\init.vim"
+Set-Variable 'CONFIG_GIT' "$HOME\.config\git\config"
+Set-Variable 'CONFIG_HOSTS' "$env:SYSTEMROOT\System32\drivers\etc\hosts"
 
 ## Themes ##
-$catppuccinMocha = $Catppuccin["Mocha"]
+$catppuccinMocha = $Catppuccin['Mocha']
 oh-my-posh init pwsh --config $HOME\.config\omp\fluent.json | Invoke-Expression
 $ENV:FZF_DEFAULT_OPTS = @"
 --color=bg+:$($catppuccinMocha.Surface0),spinner:$($catppuccinMocha.Sapphire)
@@ -40,24 +37,24 @@ $ENV:FZF_DEFAULT_OPTS = @"
 --color=border:$($catppuccinMocha.Surface2)
 "@
 Set-PSReadLineOption -Colors @{
-	ContinuationPrompt     = $catppuccinMocha.Teal.Foreground()
-	Emphasis               = $catppuccinMocha.Sky.Foreground()
-	Selection              = $catppuccinMocha.Surface0.Background()
-	InlinePrediction       = $catppuccinMocha.Overlay0.Foreground()
-	ListPrediction         = $catppuccinMocha.Rosewater.Foreground()
-	ListPredictionSelected = $catppuccinMocha.Surface0.Background()
-	Command                = $catppuccinMocha.Blue.Foreground()
-	Comment                = $catppuccinMocha.Green.Foreground()
-	Default                = $catppuccinMocha.Sky.Foreground()
-	Error                  = $catppuccinMocha.Red.Foreground()
-	Keyword                = $catppuccinMocha.Blue.Foreground()
-	Member                 = $catppuccinMocha.Rosewater.Foreground()
-	Number                 = $catppuccinMocha.Pink.Foreground()
-	Operator               = $catppuccinMocha.Sky.Foreground()
-	Parameter              = $catppuccinMocha.Teal.Foreground()
-	String                 = $catppuccinMocha.Green.Foreground()
-	Type                   = $catppuccinMocha.Yellow.Foreground()
-	Variable               = $catppuccinMocha.Sky.Foreground()
+  ContinuationPrompt     = $catppuccinMocha.Teal.Foreground()
+  Emphasis               = $catppuccinMocha.Sky.Foreground()
+  Selection              = $catppuccinMocha.Surface0.Background()
+  InlinePrediction       = $catppuccinMocha.Overlay0.Foreground()
+  ListPrediction         = $catppuccinMocha.Rosewater.Foreground()
+  ListPredictionSelected = $catppuccinMocha.Surface0.Background()
+  Command                = $catppuccinMocha.Blue.Foreground()
+  Comment                = $catppuccinMocha.Green.Foreground()
+  Default                = $catppuccinMocha.Sky.Foreground()
+  Error                  = $catppuccinMocha.Red.Foreground()
+  Keyword                = $catppuccinMocha.Blue.Foreground()
+  Member                 = $catppuccinMocha.Rosewater.Foreground()
+  Number                 = $catppuccinMocha.Pink.Foreground()
+  Operator               = $catppuccinMocha.Sky.Foreground()
+  Parameter              = $catppuccinMocha.Teal.Foreground()
+  String                 = $catppuccinMocha.Green.Foreground()
+  Type                   = $catppuccinMocha.Yellow.Foreground()
+  Variable               = $catppuccinMocha.Sky.Foreground()
 }
 
 ## Initialization ##
@@ -65,4 +62,3 @@ Invoke-Expression (& { (zoxide init powershell | Out-String) })
 Set-PSReadLineOption -PredictionSource History
 Set-PSReadLineOption -PredictionViewStyle ListView
 Clear-Host
-
