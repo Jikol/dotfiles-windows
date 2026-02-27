@@ -14,17 +14,17 @@
         {
             "command": 
             {
-                "action": "quakeMode"
-            },
-            "id": "User.quakeMode.F1E129A4"
-        },
-        {
-            "command": 
-            {
                 "action": "moveFocus",
                 "direction": "right"
             },
             "id": "User.moveFocus.87C324ED"
+        },
+        {
+            "command": 
+            {
+                "action": "quakeMode"
+            },
+            "id": "User.quakeMode.F1E129A4"
         },
         {
             "command": 
@@ -43,10 +43,6 @@
             "id": "User.moveFocus.F747588A"
         },
         {
-            "command": "closePane",
-            "id": "User.closePane"
-        },
-        {
             "command": 
             {
                 "action": "splitPane",
@@ -55,12 +51,8 @@
             "id": "User.splitPane.B39B174B"
         },
         {
-            "command": 
-            {
-                "action": "resizePane",
-                "direction": "up"
-            },
-            "id": "User.resizePane.6CD791B"
+            "command": "closePane",
+            "id": "User.closePane"
         },
         {
             "command": 
@@ -73,14 +65,22 @@
         {
             "command": 
             {
-                "action": "splitPane",
-                "split": "left"
+                "action": "resizePane",
+                "direction": "up"
             },
-            "id": "User.splitPane.21DBB4A1"
+            "id": "User.resizePane.6CD791B"
         },
         {
             "command": "find",
             "id": "User.find"
+        },
+        {
+            "command": 
+            {
+                "action": "splitPane",
+                "split": "left"
+            },
+            "id": "User.splitPane.21DBB4A1"
         },
         {
             "command": 
@@ -102,18 +102,18 @@
         {
             "command": 
             {
-                "action": "resizePane",
-                "direction": "down"
-            },
-            "id": "User.resizePane.F747588A"
-        },
-        {
-            "command": 
-            {
                 "action": "moveFocus",
                 "direction": "left"
             },
             "id": "User.moveFocus.2A0DA8E0"
+        },
+        {
+            "command": 
+            {
+                "action": "resizePane",
+                "direction": "down"
+            },
+            "id": "User.resizePane.F747588A"
         },
         {
             "command": 
@@ -136,6 +136,7 @@
     "alwaysOnTop": false,
     "alwaysShowNotificationIcon": true,
     "alwaysShowTabs": true,
+    "compatibility.allowHeadless": true,
     "copyFormatting": "none",
     "copyOnSelect": true,
     "defaultProfile": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
@@ -144,8 +145,8 @@
     "keybindings": 
     [
         {
-            "id": null,
-            "keys": "ctrl+right"
+            "id": "User.splitPane.864CD510",
+            "keys": "ctrl+alt+right"
         },
         {
             "id": null,
@@ -156,20 +157,12 @@
             "keys": "ctrl+alt+up"
         },
         {
-            "id": "User.splitPane.864CD510",
-            "keys": "ctrl+alt+right"
+            "id": null,
+            "keys": "ctrl+right"
         },
         {
             "id": "Terminal.CopyToClipboard",
             "keys": "ctrl+c"
-        },
-        {
-            "id": "User.moveFocus.87C324ED",
-            "keys": "shift+right"
-        },
-        {
-            "id": null,
-            "keys": "ctrl+shift+d"
         },
         {
             "id": null,
@@ -177,7 +170,11 @@
         },
         {
             "id": null,
-            "keys": "ctrl+alt+8"
+            "keys": "ctrl+shift+d"
+        },
+        {
+            "id": "User.moveFocus.87C324ED",
+            "keys": "shift+right"
         },
         {
             "id": "Terminal.PasteFromClipboard",
@@ -185,7 +182,7 @@
         },
         {
             "id": null,
-            "keys": "ctrl+comma"
+            "keys": "ctrl+alt+8"
         },
         {
             "id": "Terminal.PasteFromClipboard",
@@ -196,16 +193,20 @@
             "keys": "ctrl+shift+f"
         },
         {
+            "id": null,
+            "keys": "ctrl+comma"
+        },
+        {
             "id": "User.moveFocus.F747588A",
             "keys": "shift+down"
         },
         {
-            "id": null,
-            "keys": "shift+insert"
-        },
-        {
             "id": "User.quakeMode.F1E129A4",
             "keys": "ctrl+alt+t"
+        },
+        {
+            "id": null,
+            "keys": "shift+insert"
         },
         {
             "id": "User.splitPane.D5151347",
@@ -216,16 +217,16 @@
             "keys": "win+sc(41)"
         },
         {
+            "id": null,
+            "keys": "ctrl+alt+5"
+        },
+        {
             "id": "Terminal.CopyToClipboard",
             "keys": "ctrl+shift+c"
         },
         {
             "id": null,
             "keys": "alt+shift+right"
-        },
-        {
-            "id": null,
-            "keys": "ctrl+alt+5"
         },
         {
             "id": "User.moveFocus.2A0DA8E0",
@@ -245,10 +246,6 @@
         },
         {
             "id": null,
-            "keys": "alt+down"
-        },
-        {
-            "id": null,
             "keys": "ctrl+shift+t"
         },
         {
@@ -257,15 +254,11 @@
         },
         {
             "id": null,
+            "keys": "alt+down"
+        },
+        {
+            "id": null,
             "keys": "ctrl+shift+1"
-        },
-        {
-            "id": null,
-            "keys": "ctrl+shift+comma"
-        },
-        {
-            "id": null,
-            "keys": "ctrl+shift+5"
         },
         {
             "id": null,
@@ -273,15 +266,23 @@
         },
         {
             "id": null,
+            "keys": "ctrl+shift+5"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+shift+comma"
+        },
+        {
+            "id": null,
             "keys": "ctrl+shift+3"
         },
         {
             "id": null,
-            "keys": "ctrl+insert"
+            "keys": "ctrl+shift+6"
         },
         {
             "id": null,
-            "keys": "ctrl+shift+6"
+            "keys": "ctrl+insert"
         },
         {
             "id": null,
@@ -293,6 +294,10 @@
         },
         {
             "id": null,
+            "keys": "ctrl+shift+n"
+        },
+        {
+            "id": null,
             "keys": "ctrl+alt+4"
         },
         {
@@ -301,7 +306,7 @@
         },
         {
             "id": null,
-            "keys": "ctrl+shift+n"
+            "keys": "ctrl+alt+1"
         },
         {
             "id": null,
@@ -309,15 +314,11 @@
         },
         {
             "id": null,
-            "keys": "ctrl+alt+1"
+            "keys": "ctrl+alt+2"
         },
         {
             "id": null,
             "keys": "ctrl+alt+9"
-        },
-        {
-            "id": null,
-            "keys": "ctrl+alt+2"
         },
         {
             "id": null,
@@ -389,19 +390,19 @@
         },
         {
             "id": null,
-            "keys": "ctrl+shift+a"
-        },
-        {
-            "id": null,
             "keys": "menu"
         },
         {
             "id": null,
-            "keys": "ctrl+shift+pgdn"
+            "keys": "ctrl+shift+a"
         },
         {
             "id": null,
             "keys": "ctrl+shift+pgup"
+        },
+        {
+            "id": null,
+            "keys": "ctrl+shift+pgdn"
         },
         {
             "id": null,
@@ -501,7 +502,18 @@
             {
                 "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
                 "hidden": false,
-                "name": "Command Prompt"
+                "name": "Command Prompt",
+                "tabTitle": "Command Prompt"
+            },
+            {
+                "commandline": "C:\\Windows\\system32\\wsl.exe",
+                "experimental.retroTerminalEffect": false,
+                "guid": "{d471cc89-fdfa-465f-8c6b-7b68a8e9825c}",
+                "hidden": false,
+                "icon": "ms-appx:///ProfileIcons/{9acb9455-ca41-5af7-950f-6bca1bc9722f}.png",
+                "name": "Linux",
+                "startingDirectory": null,
+                "tabTitle": "Linux"
             }
         ]
     },

@@ -18,6 +18,8 @@ Set-Alias vim nvim
 Set-Alias fetch fastfetch
 Set-Alias ip ipconfig
 Set-Alias ch chezmoi
+Set-Alias ws webstorm
+Set-Alias pch pycharm
 
 ## Variables ##
 Set-Variable 'PROFILE' "$HOME\.config\pwsh\profile.ps1"
