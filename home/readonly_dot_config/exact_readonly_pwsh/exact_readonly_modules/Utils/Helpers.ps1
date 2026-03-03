@@ -61,7 +61,3 @@ function Sync-Bat {
 function Invoke-Pipe {
   Get-ChildItem \\.\pipe\
 }
-
-function Import-Profile {
-  . $CONFIG_POWERSHELL
-}

@@ -6,9 +6,6 @@
       "alignment": "left",
       "segments": [
         {
-          "properties": {
-            "cache_duration": "none"
-          },
           "leading_diamond": "\ue0b6",
           "template": " {{ .Icon }} ",
           "foreground": "#363a4f",
@@ -17,11 +14,10 @@
           "style": "diamond"
         },
         {
-          "properties": {
-            "cache_duration": "none",
+          "options": {
             "folder_icon": "\uf07c",
             "folder_separator_icon": " ❯ ",
-            "home_icon": "\uf7db",
+            "home_icon": "\uf015",
             "max_depth": 3,
             "style": "agnoster_short"
           },
@@ -33,12 +29,9 @@
           "style": "powerline"
         },
         {
-          "properties": {
+          "options": {
             "branch_icon": "\ue725 ",
-            "cache_duration": "none",
-            "fetch_stash_count": true,
-            "fetch_status": true,
-            "fetch_worktree_count": true
+            "fetch_status": true
           },
           "template": " {{ .HEAD }}{{ if .Staging.Changed }} \uf046 {{ .Staging.String }}{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if .Working.Changed }} \uf044 {{ .Working.String }}{{ end }}{{ if gt .StashCount 0 }} \uf692 {{ .StashCount }}{{ end }} ",
           "foreground": "#24273a",
@@ -48,19 +41,21 @@
           "style": "powerline"
         },
         {
-          "properties": {
+          "options": {
             "always_enabled": true,
             "cache_duration": "none",
             "style": "roundrock",
             "threshold": 0
           },
           "trailing_diamond": "\ue0b4",
-          "template": " {{ if gt .Code 0 }}\uf00d{{ else }}\uf42e{{ end }}",
+          "template": " {{ if gt .Code 0 }}\uf00d{{ else }}\uf00c{{ end }}",
           "foreground": "#363a4f",
           "background": "#f5c2e7",
-          "type": "exit",
+          "type": "text",
           "style": "diamond",
-          "background_templates": ["{{ if gt .Code 0 }}#f38ba8{{ end }}"]
+          "background_templates": [
+            "{{ if gt .Code 0 }}#f38ba8{{ end }}"
+          ]
         }
       ]
     },
@@ -69,7 +64,7 @@
       "alignment": "right",
       "segments": [
         {
-          "properties": {
+          "options": {
             "cache_duration": "none",
             "fetch_version": true,
             "display_mode": "always",
@@ -83,24 +78,23 @@
           "style": "diamond"
         },
         {
-          "properties": {
+          "options": {
             "cache_duration": "none",
             "fetch_version": true,
             "display_mode": "always",
             "home_enabled": true
           },
-          "template": "\ue718 {{ if .Error }}{{ .Error }}{{ else }}{{ if .PackageManagerIcon }}{{ .PackageManagerIcon }}{{ end }}{{ .Full }} {{ end }}",
-          "foreground": "#1f1e2e",
+          "template": "\ue76f {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }} {{ end }}",
+          "foreground": "#181825",
           "powerline_symbol": "\ue0b6",
-          "background": "#a6e3a1",
-          "type": "node",
+          "background": "#fbf0df",
+          "type": "bun",
           "style": "powerline",
           "invert_powerline": true
         },
         {
-          "properties": {
-            "always_enabled": true,
-            "cache_duration": "none"
+          "options": {
+            "always_enabled": true
           },
           "template": " {{ .FormattedMs }}",
           "foreground": "#cad3f5",
@@ -111,7 +105,7 @@
           "invert_powerline": true
         },
         {
-          "properties": {
+          "options": {
             "cache_duration": "none"
           },
           "trailing_diamond": "\ue0b4",
@@ -128,15 +122,17 @@
       "alignment": "left",
       "segments": [
         {
-          "properties": {
+          "options": {
             "always_enabled": true,
             "cache_duration": "none"
           },
           "template": "\uf061 ",
           "foreground": "#e0f8ff",
-          "type": "exit",
+          "type": "text",
           "style": "plain",
-          "foreground_templates": ["{{ if gt .Code 0 }}#f38ba8{{ end }}"]
+          "foreground_templates": [
+            "{{ if gt .Code 0 }}#f38ba8{{ end }}"
+          ]
         }
       ],
       "newline": true

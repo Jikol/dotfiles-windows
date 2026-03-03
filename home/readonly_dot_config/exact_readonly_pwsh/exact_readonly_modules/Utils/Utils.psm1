@@ -27,7 +27,6 @@ Set-Alias code Invoke-Codium
 Set-Alias winutil Open-Winutil
 Set-Alias pipe Invoke-Pipe
 
-Set-Alias rld Import-Profile
 Set-Alias batrld Sync-Bat
 
 ## Export ##
