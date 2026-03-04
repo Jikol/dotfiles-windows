@@ -35,6 +35,20 @@ function Add-Path {
   }
 }
 
+function Remove-Path {
+  param(
+    [string]$path
+  )
+  $currentPath = Get-Env -Name 'PATH'
+  $paths = $currentPath -split ';'
+  $filtered = $paths | Where-Object {
+    $_.Trim() -and ($_.Trim().ToLower() -ne $path.Trim().ToLower())
+  }
+  if ($filtered.Count -ne $paths.Count) {
+    Set-Env -Name 'PATH' -Value ($filtered -join ';')
+  }
+}
+
 function Sync-Env {
   Write-Host 'Reloading Environment Variables...' -ForegroundColor Cyan
   $userName = $env:USERNAME

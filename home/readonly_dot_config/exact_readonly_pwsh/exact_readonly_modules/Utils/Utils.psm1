@@ -13,6 +13,8 @@ Set-Alias .. Move-LocationParent
 
 Set-Alias envpath Show-Path
 Set-Alias envrld Sync-Env
+Set-Alias addpath Add-Path
+Set-Alias rmpath Remove-Path
 Set-Alias printenv Show-Env
 
 Set-Alias f Invoke-FzfDir
