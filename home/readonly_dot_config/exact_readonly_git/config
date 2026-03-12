@@ -58,3 +58,6 @@
   path = github.gitconfig
 [credential "helperselector"]
 	selected = <no helper>
+[user]
+	email = gikol113@gmail.com
+	name = Ondrej

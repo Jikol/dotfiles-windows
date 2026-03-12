@@ -53,5 +53,6 @@
   "powershell.buttons.showPanelMovementButtons": true,
   "powershell.codeFolding.showLastLine": false,
   "powershell.sideBar.CommandExplorerVisibility": true,
-  "git.openRepositoryInParentFolders": "never"
+  "git.openRepositoryInParentFolders": "never",
+  "explorer.confirmDelete": false
 }
