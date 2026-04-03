@@ -28,6 +28,7 @@ Set-Alias chsync Invoke-ChezmoiSync
 Set-Alias code Invoke-Codium
 Set-Alias winutil Open-Winutil
 Set-Alias pipe Invoke-Pipe
+Set-Alias ssh Invoke-SSHWrapper
 
 Set-Alias batrld Sync-Bat
 

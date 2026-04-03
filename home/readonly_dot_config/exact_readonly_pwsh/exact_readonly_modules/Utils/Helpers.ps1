@@ -42,6 +42,24 @@ function Invoke-ChezmoiSync {
   }
 }
 
+function Invoke-SSHWrapper {
+  if ($args.Count -ge 1) {
+    if ($args[0] -in @('ls', 'list')) {
+      $configPath = "$env:USERPROFILE\.ssh\config"
+      if (Test-Path $configPath) {
+        Select-String -Path $configPath -Pattern '^\s*(Host|HostName)\s+' |
+        ForEach-Object { $_.Line }
+      }
+      else {
+        Write-Host "No SSH config file found at $configPath"
+      }
+    }
+    else {
+      & ssh.exe @args
+    }
+  }
+}  
+
 function Move-LocationChezmoi {
   Set-Location "$env:CHEZMOI_DATA_HOME"
 }
