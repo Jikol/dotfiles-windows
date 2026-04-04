@@ -23,6 +23,13 @@
       ]
     },
     {
+      "path": "~/.local/share/cmd",
+      "attributes": [
+        "exact",
+        "readonly"
+      ]
+    },
+    {
       "path": "~/.config/bat",
       "attributes": [
         "exact",
@@ -115,13 +122,6 @@
     },
     {
       "path": "~/.config/lf",
-      "attributes": [
-        "exact",
-        "readonly"
-      ]
-    },
-    {
-      "path": "~/.config/cmd",
       "attributes": [
         "exact",
         "readonly"
