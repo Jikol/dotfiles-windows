@@ -119,6 +119,13 @@
         "exact",
         "readonly"
       ]
+    },
+    {
+      "path": "~/.config/cmd",
+      "attributes": [
+        "exact",
+        "readonly"
+      ]
     }
   ]
 }
