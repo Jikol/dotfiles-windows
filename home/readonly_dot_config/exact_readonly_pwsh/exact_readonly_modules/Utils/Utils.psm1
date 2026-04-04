@@ -3,6 +3,7 @@
 . "$PSScriptRoot\Launchers.ps1"
 . "$PSScriptRoot\Listings.ps1"
 . "$PSScriptRoot\Environment.ps1"
+. "$PSScriptRoot\Agents.ps1"
 . "$PSScriptRoot\Fzf.ps1"
  
 ## Aliases ##
@@ -29,6 +30,8 @@ Set-Alias code Invoke-Codium
 Set-Alias winutil Open-Winutil
 Set-Alias pipe Invoke-Pipe
 Set-Alias ssh Invoke-SSHWrapper
+
+Set-Alias commit Invoke-CopilotCommit
 
 Set-Alias batrld Sync-Bat
 
