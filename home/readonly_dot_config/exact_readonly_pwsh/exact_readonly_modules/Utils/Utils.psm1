@@ -31,7 +31,7 @@ Set-Alias winutil Open-Winutil
 Set-Alias pipe Invoke-Pipe
 Set-Alias ssh Invoke-SSHWrapper
 
-Set-Alias commit Invoke-CopilotCommit
+Set-Alias cld Invoke-ClaudeWrapper
 
 Set-Alias batrld Sync-Bat
 

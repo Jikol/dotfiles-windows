@@ -35,5 +35,9 @@ gsudo {
   # Docker #
   Set-Symlink -Target "$HOME\.docker\config.json" -Source "$HOME\.config\docker\config.json"
 
+  # Claude Code #
+  Set-Symlink -Target "$HOME\.local\share\claude\settings.json" -Source "$HOME\.config\claude\settings.json"
+  Set-Symlink -Target "$HOME\.local\share\claude\CLAUDE.md" -Source "$HOME\.config\claude\CLAUDE.md"
+
   Write-Host 'Symlinks created' -ForegroundColor Green
 }

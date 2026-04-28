@@ -23,13 +23,6 @@
       ]
     },
     {
-      "path": "~/.local/share/cmd",
-      "attributes": [
-        "exact",
-        "readonly"
-      ]
-    },
-    {
       "path": "~/.config/bat",
       "attributes": [
         "exact",
@@ -122,6 +115,20 @@
     },
     {
       "path": "~/.config/lf",
+      "attributes": [
+        "exact",
+        "readonly"
+      ]
+    },
+    {
+      "path": "~/.config/claude",
+      "attributes": [
+        "exact",
+        "readonly"
+      ]
+    },
+    {
+      "path": "~/.config/ccstatusline",
       "attributes": [
         "exact",
         "readonly"

@@ -1,12 +1,17 @@
-function Invoke-CopilotCommit {
-  copilot `
-    -p "Create new commit for staged files with appropriate message.
-    Commit message rules:
-     - Check git status, diff and last 10 commits to match project style
-     - Format: <type>: <summary>
-     - bullet
-     - bullet
-     - Types: feat/fix/refactor/chore/docs/style/test
-     - No Co-authored-by trailer" `
-    --yolo --no-ask-user --model claude-haiku-4.5
+function Invoke-ClaudeWrapper {
+  if ($args[0] -in @("c", "commit")) {
+    Invoke-ClaudeCommit
+  } else {
+    claude @args
+  }
+}
+
+function Invoke-ClaudeCommit {
+  $skill = Get-Content "$env:CLAUDE_CONFIG_DIR\skills\git\SKILL.md" -Raw
+  claude `
+    -p "Create new commit for staged files with appropriate message." `
+    --append-system-prompt $skill `
+    --allowed-tools "Bash" `
+    --model claude-haiku-4-5-20251001 `
+    --dangerously-skip-permissions
 }

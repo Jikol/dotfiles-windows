@@ -1,0 +1,86 @@
+{
+  "version": 3,
+  "lines": [
+    [
+      {
+        "id": "1",
+        "type": "model",
+        "color": "cyan"
+      },
+      {
+        "id": "2",
+        "type": "separator"
+      },
+      {
+        "id": "1cfef4e3-3570-43ee-9637-464c7acb4fcf",
+        "type": "thinking-effort"
+      },
+      {
+        "id": "fe5974c8-47a8-47ad-8bf6-8679d2e4b49f",
+        "type": "flex-separator"
+      },
+      {
+        "id": "028bf763-0cb4-4d2e-94c0-f9199b3c47bf",
+        "type": "context-bar"
+      },
+      {
+        "id": "4",
+        "type": "separator"
+      },
+      {
+        "id": "90415be6-d5c2-44aa-94a3-a9cb62bc2fb3",
+        "type": "tokens-total"
+      }
+    ],
+    [
+      {
+        "id": "88ed4211-406b-4366-b6a8-3f24c7c78492",
+        "type": "reset-timer"
+      },
+      {
+        "id": "13cf7cfd-f021-4093-a939-1818382cdc18",
+        "type": "separator"
+      },
+      {
+        "id": "ca074966-a47a-46a6-97e1-c5dbd3ea10da",
+        "type": "session-usage"
+      },
+      {
+        "id": "09cb70b6-91eb-4466-8e68-eb600178af44",
+        "type": "flex-separator"
+      },
+      {
+        "id": "e3c3cb7f-bbcb-4ede-9e46-da3b50d18d1d",
+        "type": "session-cost"
+      },
+      {
+        "id": "87f34863-0ba6-48de-9d0b-bbb59880c188",
+        "type": "separator"
+      },
+      {
+        "id": "8711808d-9259-45f2-9d1b-6f3d86956eca",
+        "type": "session-clock"
+      }
+    ],
+    []
+  ],
+  "flexMode": "full-until-compact",
+  "compactThreshold": 60,
+  "colorLevel": 1,
+  "inheritSeparatorColors": false,
+  "globalBold": false,
+  "minimalistMode": true,
+  "powerline": {
+    "enabled": false,
+    "separators": [
+      ""
+    ],
+    "separatorInvertBackground": [
+      false
+    ],
+    "startCaps": [],
+    "endCaps": [],
+    "autoAlign": false,
+    "continueThemeAcrossLines": false
+  }
+}

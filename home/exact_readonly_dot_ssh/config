@@ -1,5 +1,5 @@
 Host vps
-  HostName vps.jikol.dev
+  HostName 3.123.200.77
   User jikol
 
 Host vps-lpp
