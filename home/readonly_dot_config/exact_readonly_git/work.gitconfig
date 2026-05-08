@@ -1,4 +1,10 @@
 [user]
   email = ondrej.javorsky@lp-praha.cz
-	name = Ondřej Javorský
-	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAxaVxE/X3wFh3bp8FYL8kGzjfnu6BBF7Z6DnRVZEzA8
+  name = Ondřej Javorský
+  signingKey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAxaVxE/X3wFh3bp8FYL8kGzjfnu6BBF7Z6DnRVZEzA8
+
+[gpg]
+  format = ssh
+
+[commit]
+  gpgsign = true

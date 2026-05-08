@@ -1,31 +1,31 @@
 [include]
-	path = ~/.config/delta/catppuccin-mocha.gitconfig
+  path = ~/.config/delta/catppuccin-mocha.gitconfig
 
 [alias]
-	up = fetch -p
-	last = log -1 HEAD --stat --graph
-	r = remote -v
-	b = branch -a
-	c = commit -m
-	s = status -sb
-	d = diff
-	p = pull
-	P = push
-	stat = status
-	ls = log --oneline --decorate --graph
-	sub = submodule update --recursive --remote
-	conf = config --list --show-origin --show-scope
-	aliases = config --get-regex ^alias
+  up = fetch -p
+  last = log -1 HEAD --stat --graph
+  r = remote -v
+  b = branch -a
+  c = commit -m
+  s = status -sb
+  d = diff
+  p = pull
+  P = push
+  stat = status
+  ls = log --oneline --decorate --graph
+  sub = submodule update --recursive --remote
+  conf = config --list --show-origin --show-scope
+  aliases = config --get-regex ^alias
 
 [init]
-	defaultBranch = master
+  defaultBranch = master
 
 [core]
-	autocrlf = false
-  ignorecase = false
+  autocrlf = false
   filemode = false
-	sshCommand = C:/Windows/System32/OpenSSH/ssh.exe
-	pager = delta
+  ignorecase = false
+  sshCommand = C:/Windows/System32/OpenSSH/ssh.exe
+  pager = delta
 
 [delta]
   features = catppuccin-mocha
@@ -35,29 +35,21 @@
 [merge]
   conflictstyle = diff3
 
+[gpg "ssh"]
+  program = C:/Windows/System32/OpenSSH/ssh-keygen.exe
+
 [diff]
   colorMoved = default
 
 [http]
-	postBuffer = 524288000
-	maxRequestBuffer = 524288000
+  postBuffer = 524288000
+  maxRequestBuffer = 524288000
 
-[includeIf "gitdir:**/school/**/.git"]
+[includeIf "hasconfig:remote.*.url:git@github.com:*/**"]
+  path = github.gitconfig
+
+[includeIf "hasconfig:remote.*.url:git@gitlab.vsb.cz:*/**"]
   path = gitlabvsb.gitconfig
 
-[includeIf "gitdir:**/work/**/.git"]
+[includeIf "hasconfig:remote.*.url:git@ntblppjavorsky:*/**"]
   path = work.gitconfig
-
-[includeIf "gitdir:**/personal/**/.git"]
-  path = github.gitconfig
-
-[includeIf "gitdir:**/chezmoi/**/.git"]
-  path = github.gitconfig
-
-[includeIf "gitdir:**/.config/**/.git"]
-  path = github.gitconfig
-[credential "helperselector"]
-	selected = <no helper>
-[user]
-	email = gikol113@gmail.com
-	name = Ondrej
