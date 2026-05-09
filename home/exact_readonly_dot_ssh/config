@@ -6,3 +6,4 @@ Host vps
 Host vps-lpp
   HostName 172.26.72.16
   User ondrej
+  ForwardAgent yes
