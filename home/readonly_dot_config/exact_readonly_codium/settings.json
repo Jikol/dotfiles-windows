@@ -72,5 +72,8 @@
   "redhat.telemetry.enabled": true,
   "[yaml]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[dockercompose]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml"
   }
 }

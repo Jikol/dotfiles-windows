@@ -1,6 +1,7 @@
 Host vps
   HostName 3.123.200.77
   User jikol
+  ForwardAgent yes
 
 Host vps-lpp
   HostName 172.26.72.16
