@@ -2,9 +2,3 @@
   email = ondrej.javorsky.st@vsb.cz
   name = Ondřej Javorský
   signingKey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJNYvjaCdz7WWJECFmjBrldWdBSBqbPdYInWigAnKzM5
-
-[gpg]
-  format = ssh
-
-[commit]
-  gpgsign = true

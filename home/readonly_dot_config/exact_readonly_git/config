@@ -17,6 +17,9 @@
   conf = config --list --show-origin --show-scope
   aliases = config --get-regex ^alias
 
+[user]
+  name = Ondřej Javorský
+
 [init]
   defaultBranch = master
 
@@ -35,8 +38,14 @@
 [merge]
   conflictstyle = diff3
 
+[gpg]
+  format = ssh
+
 [gpg "ssh"]
-  program = C:/Windows/System32/OpenSSH/ssh-keygen.exe
+  program = /mnt/c/Windows/System32/OpenSSH/ssh-keygen.exe
+
+[commit]
+  gpgsign = true
 
 [diff]
   colorMoved = default
